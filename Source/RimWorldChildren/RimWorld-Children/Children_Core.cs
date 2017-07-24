@@ -72,13 +72,13 @@ namespace RimWorldChildren
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
 			HarmonyInstance.DEBUG = true;
 
-			var jobdriver_lovin_postfix = typeof(Lovin_Override).GetMethod ("JobDriver_Lovin_MoveNext_Postfix", AccessTools.all);
-			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, new HarmonyMethod (jobdriver_lovin_postfix), null);
+			MethodInfo jobdriver_lovin_m92_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M92_Transpiler");
+			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__92", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m92_transpiler));
 
-			var jobdriver_wear_transpiler = typeof(Wear_Override).GetMethod ("JobDriver_Wear_MoveNext_Transpiler", AccessTools.all);
+			MethodInfo jobdriver_wear_transpiler = AccessTools.Method (typeof(Wear_Override), "JobDriver_Wear_MoveNext_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Wear).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, null, new HarmonyMethod (jobdriver_wear_transpiler));
 
-			var bed_floatoptions_movenext_transpiler = typeof(BedHarmonyPatches).GetMethod ("GetFloatMenuOptions_Transpiler", AccessTools.all);
+			MethodInfo bed_floatoptions_movenext_transpiler = AccessTools.Method (typeof(BedHarmonyPatches), "GetFloatMenuOptions_Transpiler");
 			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator155", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
 		}
 	}

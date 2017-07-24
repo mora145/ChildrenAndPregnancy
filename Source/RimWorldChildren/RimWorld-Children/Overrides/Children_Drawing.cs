@@ -25,11 +25,14 @@ namespace RimWorldChildren
 	public static class PawnGraphicSet_ResolveAllGraphics_Patch{
 		[HarmonyPostfix]
 		internal static void ResolveAllGraphics_Patch(ref PawnGraphicSet __instance){
-			Pawn pawn = __instance.pawn;
-			if (pawn.RaceProps.Humanlike) {
-				Children_Drawing.ResolveAgeGraphics (__instance);
-				__instance.ResolveApparelGraphics ();
-			}
+			PawnGraphicSet _this = __instance;
+			LongEventHandler.ExecuteWhenFinished (delegate {
+				Pawn pawn = _this.pawn;
+				if (pawn.RaceProps.Humanlike) {
+					Children_Drawing.ResolveAgeGraphics (_this);
+					_this.ResolveApparelGraphics ();
+				}
+			});
 		}
 	}
 
@@ -202,18 +205,26 @@ namespace RimWorldChildren
 		// My own methods
 		internal static Graphic GetChildHeadGraphics(Shader shader, Color skinColor)
 		{
-			string str = "Male_Child";
-			string path = "Things/Pawn/Humanlike/Children/Heads/" + str;
-			return GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor);
+			Graphic_Multi graphic = null;
+			LongEventHandler.ExecuteWhenFinished (delegate {
+				string str = "Male_Child";
+				string path = "Things/Pawn/Humanlike/Children/Heads/" + str;
+				graphic = GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor) as Graphic_Multi;
+			});
+			return graphic;
 		}
 		internal static Graphic GetChildBodyGraphics(PawnGraphicSet graphicSet, Shader shader, Color skinColor)
 		{
-			string str = "Naked_Boy";
-			if (graphicSet.pawn.gender == Gender.Female) {
-				str = "Naked_Girl";
-			}
-			string path = "Things/Pawn/Humanlike/Children/Bodies/" + str;
-			return GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor);
+			Graphic_Multi graphic = null;
+			LongEventHandler.ExecuteWhenFinished (delegate {
+				string str = "Naked_Boy";
+				if (graphicSet.pawn.gender == Gender.Female) {
+					str = "Naked_Girl";
+				}
+				string path = "Things/Pawn/Humanlike/Children/Bodies/" + str;
+				graphic = GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor) as Graphic_Multi;
+			});
+			return graphic;
 		}
 
 		// Injected methods

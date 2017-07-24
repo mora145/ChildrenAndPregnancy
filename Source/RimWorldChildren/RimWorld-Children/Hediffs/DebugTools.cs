@@ -8,16 +8,21 @@ namespace RimWorldChildren
 	// Makes the pawn do Lovin' if they're in bed with their partner
 	public class Hediff_GetFuckin : HediffWithComps
 	{
-		public override void Tick ()
+		public override void PostMake ()
 		{
+			base.PostMake ();
 			if (pawn.InBed ()) {
-				Job lovin = (Job)AccessTools.Method (typeof(JobGiver_DoLovin), "TryGiveJob").Invoke (pawn, null);
-				if (lovin != null) {
-					pawn.jobs.StopAll (true);
+				Pawn partner = LovePartnerRelationUtility.GetPartnerInMyBed (pawn);
+				Building_Bed bed = pawn.CurrentBed();
+				if (partner != null) {
+					pawn.mindState.awokeVoluntarily = true;
+					partner.mindState.awokeVoluntarily = true;
+					Job lovin = new Job (JobDefOf.Lovin, partner, bed);
 					pawn.jobs.StartJob (lovin, JobCondition.InterruptForced, null, false, true, null);
 				}
 			}
 			pawn.health.RemoveHediff (this);
+			return;
 		}
 	}
 

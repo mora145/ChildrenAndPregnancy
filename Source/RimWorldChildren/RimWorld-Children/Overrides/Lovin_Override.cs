@@ -3,6 +3,9 @@ using System;
 using Verse;
 using Verse.AI;
 using Harmony;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
 
 
 namespace RimWorldChildren
@@ -11,24 +14,37 @@ namespace RimWorldChildren
 
 	internal static class Lovin_Override
 	{
-		internal static void JobDriver_Lovin_MoveNext_Postfix(ref Toil __result, ref JobDriver_Lovin __instance){
-			// Let's find the last yield return block
-			JobDriver_Lovin _this = __instance;
-			if (__result.socialMode == RandomSocialMode.Off) {
-				__result.AddFinishAction (delegate {
-					// one in five chance to become pregnant? Probably expand on this later
-					// Make sure this isn't a gay/lesbian couple. Mpreg fujoshits blown the FUCK out
-					Pawn partner = (Pawn)AccessTools.Property (typeof(JobDriver_Lovin), "Partner").GetValue (_this, null);
-					if(_this.pawn.gender != partner.gender){
-						// Find out who should become pregnant
-						if(partner.gender == Gender.Female) Lovin_Override.TryToImpregnate(_this.pawn, partner);
-						else Lovin_Override.TryToImpregnate(partner, _this.pawn);
-					}
-				});
+		static IEnumerable<CodeInstruction> JobDriver_Lovin_M92_Transpiler(IEnumerable<CodeInstruction> instructions){
+			List<CodeInstruction> ILs = instructions.ToList ();
+			Type iterator = typeof(JobDriver_Lovin).GetNestedType ("<MakeNewToils>c__Iterator32", AccessTools.all);
+			Log.Message (AccessTools.Property(typeof(JobDriver_Lovin), "Partner").GetGetMethod(true).ToString());
+			int injectIndex = ILs.FindIndex (IL => IL.opcode == OpCodes.Ret);
+			List<CodeInstruction> injection = new List<CodeInstruction> {
+				new CodeInstruction(OpCodes.Ldarg_0),
+				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "<>f__this")),
+				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(JobDriver_Lovin), "pawn")),
+				new CodeInstruction(OpCodes.Ldarg_0),
+				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "<>f__this")),
+				new CodeInstruction(OpCodes.Call, AccessTools.Property(typeof(JobDriver_Lovin), "Partner").GetGetMethod(true)),
+				new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Lovin_Override), "TryToImpregnate")),
+			};
+			ILs.InsertRange (injectIndex, injection);
+
+			foreach (CodeInstruction IL in ILs) {
+				yield return IL;
 			}
 		}
-			
-		internal static void TryToImpregnate(Pawn male, Pawn female){
+
+		internal static void TryToImpregnate(Pawn initiator, Pawn partner){
+
+			// default
+			Pawn male = initiator;
+			Pawn female = partner;
+			// Find out who's who
+			if(initiator.gender != partner.gender && partner.gender == Gender.Male){
+				male = partner;
+				female = initiator;
+			}
 
 			// Only humans can be impregnated for now
 			if (female.def.defName != "Human")
@@ -44,11 +60,13 @@ namespace RimWorldChildren
 			// Check the pawn's age to see how likely it is she can carry a fetus
 			// 25 and below is guaranteed, 50 and above is impossible, 37.5 is 50% chance
 			float preg_chance = Math.Max (1 - (Math.Max (female.ageTracker.AgeBiologicalYearsFloat - 25, 0) / 25), 0) * 0.33f;
+			// For debug testing
+			//float preg_chance = 1;
 			if (preg_chance < Rand.Value) {
-				//Log.Message ("Impregnation failed. Chance was " + preg_chance);
+				if(Prefs.DevMode) Log.Message ("Impregnation failed. Chance was " + preg_chance);
 				return;
 			}
-			//Log.Message ("Impregnation succeeded. Chance was " + preg_chance);
+			if(Prefs.DevMode) Log.Message ("Impregnation succeeded. Chance was " + preg_chance);
 			// Spawn a bunch of hearts. Sharp eyed players may notice this means impregnation occurred.
 			for(int i = 0; i <= 3; i++){
 				MoteMaker.ThrowMetaIcon(male.Position, male.MapHeld, ThingDefOf.Mote_Heart);
