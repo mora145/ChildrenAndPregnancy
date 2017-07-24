@@ -135,6 +135,7 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Stops pawns from randomly dying when downed
 	[HarmonyPatch(typeof(Pawn_HealthTracker), "CheckForStateChange")]
 	public static class Pawn_HealthTracker_CheckForStateChange_Patch
 	{
@@ -143,9 +144,12 @@ namespace RimWorldChildren
 		{
 			List<CodeInstruction> ILs = instructions.ToList ();
 
-			MethodInfo KillPawn = typeof(Pawn).GetMethod ("Kill");
-			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Callvirt && IL.operand == KillPawn);
-			ILs.RemoveRange (index - 3, 4);
+			MethodInfo isPlayerFaction = typeof(Faction).GetProperty ("IsPlayer").GetGetMethod ();
+			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Callvirt && IL.operand == isPlayerFaction) + 2;
+			List<CodeInstruction> injection = new List<CodeInstruction> {
+				new CodeInstruction(OpCodes.Br, ILs[index-1].operand),
+			};
+			ILs.InsertRange (index, injection);
 
 			foreach (CodeInstruction instruction in ILs) {
 				yield return instruction;
@@ -210,7 +214,7 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void Notify_EquipmentAdded_Patch(ref ThingWithComps eq, ref Pawn_EquipmentTracker __instance){
 			Pawn pawn = __instance.ParentHolder as Pawn;
-			if (eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child) {
+			if (eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
 				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}),MessageSound.Negative );
 			}
 		}
