@@ -25,14 +25,11 @@ namespace RimWorldChildren
 	public static class PawnGraphicSet_ResolveAllGraphics_Patch{
 		[HarmonyPostfix]
 		internal static void ResolveAllGraphics_Patch(ref PawnGraphicSet __instance){
-			PawnGraphicSet _this = __instance;
-			LongEventHandler.ExecuteWhenFinished (delegate {
-				Pawn pawn = _this.pawn;
-				if (pawn.RaceProps.Humanlike) {
-					Children_Drawing.ResolveAgeGraphics (_this);
-					_this.ResolveApparelGraphics ();
-				}
-			});
+			Pawn pawn = __instance.pawn;
+			if (pawn.RaceProps.Humanlike) {
+				Children_Drawing.ResolveAgeGraphics (__instance);
+				__instance.ResolveApparelGraphics ();
+			}
 		}
 	}
 
@@ -42,7 +39,7 @@ namespace RimWorldChildren
 		internal static void ResolveApparelGraphics_Patch(ref PawnGraphicSet __instance){
 			Pawn pawn = __instance.pawn;
 			// Updates the beard
-			if (pawn.apparel.BodyPartGroupIsCovered (BodyPartGroupDefOf.UpperHead) && pawn.RaceProps.Humanlike) {
+			if (pawn.apparel != null && pawn.apparel.BodyPartGroupIsCovered (BodyPartGroupDefOf.UpperHead) && pawn.RaceProps.Humanlike) {
 				Children_Drawing.ResolveAgeGraphics (__instance);
 			}
 		}
@@ -50,10 +47,10 @@ namespace RimWorldChildren
 		static IEnumerable<CodeInstruction> ResolveApparelGraphics_Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
 			List<CodeInstruction> ILs = instructions.ToList ();
-			int injectIndex = ILs.FindIndex (x => x.opcode == OpCodes.Ldloca_S) - 4;
-			ILs.RemoveRange (injectIndex + 2, 2);
+			int injectIndex = ILs.FindIndex (x => x.opcode == OpCodes.Ldloca_S) - 2;
+			ILs.RemoveRange (injectIndex, 2);
 			MethodInfo childBodyCheck = typeof(Children_Drawing).GetMethod ("ModifyChildBodyType");
-			ILs.Insert(injectIndex + 2,new CodeInstruction(OpCodes.Call, childBodyCheck));
+			ILs.Insert(injectIndex, new CodeInstruction(OpCodes.Call, childBodyCheck));
 
 			foreach(CodeInstruction IL in ILs){
 				yield return IL;
@@ -206,24 +203,20 @@ namespace RimWorldChildren
 		internal static Graphic GetChildHeadGraphics(Shader shader, Color skinColor)
 		{
 			Graphic_Multi graphic = null;
-			LongEventHandler.ExecuteWhenFinished (delegate {
 				string str = "Male_Child";
 				string path = "Things/Pawn/Humanlike/Children/Heads/" + str;
 				graphic = GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor) as Graphic_Multi;
-			});
 			return graphic;
 		}
 		internal static Graphic GetChildBodyGraphics(PawnGraphicSet graphicSet, Shader shader, Color skinColor)
 		{
 			Graphic_Multi graphic = null;
-			LongEventHandler.ExecuteWhenFinished (delegate {
 				string str = "Naked_Boy";
 				if (graphicSet.pawn.gender == Gender.Female) {
 					str = "Naked_Girl";
 				}
 				string path = "Things/Pawn/Humanlike/Children/Bodies/" + str;
 				graphic = GraphicDatabase.Get<Graphic_Multi> (path, shader, Vector2.one, skinColor) as Graphic_Multi;
-			});
 			return graphic;
 		}
 
