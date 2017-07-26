@@ -15,9 +15,7 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void ApparelChanged_Postfix(ref Pawn_ApparelTracker __instance){
 			Pawn_ApparelTracker _this = __instance;
-			LongEventHandler.ExecuteWhenFinished (delegate {
-				Children_Drawing.ResolveAgeGraphics (_this.pawn.Drawer.renderer.graphics);
-			});
+			Children_Drawing.ResolveAgeGraphics (_this.pawn.Drawer.renderer.graphics);
 		}
 	}
 
