@@ -15,7 +15,9 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void ApparelChanged_Postfix(ref Pawn_ApparelTracker __instance){
 			Pawn_ApparelTracker _this = __instance;
-			Children_Drawing.ResolveAgeGraphics (_this.pawn.Drawer.renderer.graphics);
+			LongEventHandler.ExecuteWhenFinished (delegate {
+				Children_Drawing.ResolveAgeGraphics (_this.pawn.Drawer.renderer.graphics);
+			});
 		}
 	}
 
@@ -24,9 +26,12 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void ResolveAllGraphics_Patch(ref PawnGraphicSet __instance){
 			Pawn pawn = __instance.pawn;
+			PawnGraphicSet _this = __instance;
 			if (pawn.RaceProps.Humanlike) {
 				Children_Drawing.ResolveAgeGraphics (__instance);
-				__instance.ResolveApparelGraphics ();
+				LongEventHandler.ExecuteWhenFinished (delegate {
+					_this.ResolveApparelGraphics ();
+				});
 			}
 		}
 	}
@@ -236,9 +241,10 @@ namespace RimWorldChildren
 						Vector3 vector = new Vector3 (0, 0, 0.5f).RotatedBy (bed.Rotation.AsAngle);
 						newPos -= vector;
 					} else if (pawn.ageTracker.CurLifeStageIndex == AgeStage.Child && bed.def.size.z == 1) { // Are we in a crib?
-						Vector3 vector = new Vector3 (0, 0, 0.5f).RotatedBy (bed.Rotation.AsAngle);
+						Vector3 vector = new Vector3 (0, 0, 0.2f).RotatedBy (bed.Rotation.AsAngle);
 						newPos -= vector;
 					}
+					newPos += new Vector3 (0, 0, 0.2f);
 				}
 			}
 			return newPos;
