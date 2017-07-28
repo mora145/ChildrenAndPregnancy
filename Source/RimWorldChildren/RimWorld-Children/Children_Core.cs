@@ -173,7 +173,7 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void TryCastShot_Patch(ref Verb_Shoot __instance){
 			Pawn pawn = __instance.CasterPawn;
-			if (pawn != null && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child) {
+			if (pawn != null && pawn.def.defName == "Human" && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child) {
 				// The weapon is too heavy and the child will (likely) drop it when trying to fire
 				if (__instance.ownerEquipment.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn)) {
 
@@ -214,7 +214,7 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void Notify_EquipmentAdded_Patch(ref ThingWithComps eq, ref Pawn_EquipmentTracker __instance){
 			Pawn pawn = __instance.ParentHolder as Pawn;
-			if (eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
+			if (pawn != null && pawn.def.defName == "Human" && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
 				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}),MessageSound.Negative );
 			}
 		}
