@@ -32,7 +32,7 @@ namespace RimWorldChildren
 		public override void Tick ()
 		{
 			if (!pawn.health.hediffSet.HasHediff(HediffDef.Named("HumanPregnancy"))) {
-				pawn.health.AddHediff (HediffDef.Named("HumanPregnancy"), pawn.RaceProps.body.AllParts.Find(x => x.def == BodyPartDefOf.Torso), null);
+				pawn.health.AddHediff (Hediff_HumanPregnancy.Create(pawn, null), pawn.RaceProps.body.AllParts.Find(x => x.def == BodyPartDefOf.Torso), null);
 			}
 			pawn.health.hediffSet.GetFirstHediffOfDef (HediffDef.Named("HumanPregnancy")).Severity = 0.995f;
 

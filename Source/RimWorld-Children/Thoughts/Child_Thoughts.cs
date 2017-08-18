@@ -33,13 +33,29 @@ namespace RimWorldChildren
 				return false;
 			Pawn mother = p.relations.GetFirstDirectRelationPawn (PawnRelationDefOf.Parent, x => x.gender == Gender.Female);
 			Pawn father = p.relations.GetFirstDirectRelationPawn (PawnRelationDefOf.Parent, x => x.gender == Gender.Male);
-			byte parents = 0;
-			if (mother != null && mother.GetRoom () == p.GetRoom () && mother.Position.DistanceTo (p.Position) < maxDist)
-				parents += 1;
-			if (father != null && father.GetRoom () == p.GetRoom () && father.Position.DistanceTo (p.Position) < maxDist)
-				parents += 2;
-			ThoughtState[] states = {false, ThoughtState.ActiveAtStage (0), ThoughtState.ActiveAtStage (1), ThoughtState.ActiveAtStage (2)};
-			return states [parents];
+			if (ArePawnsInSameRoom(p, mother) && ArePawnsInSameRoom(p, father)){
+                return ThoughtState.ActiveAtStage(2);
+            }
+            else if(ArePawnsInSameRoom(p, mother))
+            {
+                return ThoughtState.ActiveAtStage(0);
+            }
+            else if(ArePawnsInSameRoom(p, father))
+            {
+                return ThoughtState.ActiveAtStage(1);
+            }
+            else
+            {
+                return false;
+            }
 		}
+
+        protected bool ArePawnsInSameRoom(Pawn a, Pawn b)
+        {
+            if (a == null || b == null) return false;
+
+            return (a.GetRoom() == b.GetRoom() && 
+                a.Position.DistanceTo(b.Position) < maxDist);
+        }
 	}
 }

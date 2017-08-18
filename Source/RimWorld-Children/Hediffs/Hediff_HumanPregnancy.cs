@@ -16,7 +16,7 @@ namespace RimWorldChildren
 		//
 		// Static Fields
 		//
-
+		private const int TicksPerDay = 60000;
 		private const int MiscarryCheckInterval = 1000;
 
 		private const float MTBMiscarryStarvingDays = 0.5f;
@@ -40,6 +40,18 @@ namespace RimWorldChildren
 			private set {
 				Severity = value;
 			}
+		}
+
+		public static Hediff_HumanPregnancy Create(Pawn mother, Pawn father)
+		{
+			var torso = mother.RaceProps.body.AllParts.Find(x => x.def == BodyPartDefOf.Torso);
+			var hediff = (Hediff_HumanPregnancy) HediffMaker.MakeHediff(HediffDef.Named("HumanPregnancy"), mother, torso);
+			hediff.is_discovered = false;
+
+			// Todo: Capture genetics info about father/mother and save on hediff instead of ref. 
+			// If father leaves or is killed, info is still accessible when child is eventually born
+			hediff.father = father;
+			return hediff;
 		}
 
 		private bool IsSeverelyWounded {
@@ -74,16 +86,18 @@ namespace RimWorldChildren
 				Part = torso;
 		}
 
-		public override bool Visible {
-			get {
-				return is_discovered; 
+
+		public override bool Visible
+		{
+			get
+			{
+				return is_discovered;
 			}
 		}
 
 		public void DiscoverPregnancy (){
 			is_discovered = true;
-			Find.LetterStack.ReceiveLetter ("WordHumanPregnancy".Translate(), "MessageIsPregnant".Translate (new object[] { pawn.LabelIndefinite () }), LetterDefOf.Good, pawn, null);
-			 
+			Find.LetterStack.ReceiveLetter ("WordHumanPregnancy".Translate(), "MessageIsPregnant".Translate (new object[] { pawn.LabelIndefinite () }), LetterDefOf.Good, pawn, null);		 
 		}
 
 		static List<TraitDef> genetic_traits = new List<TraitDef> {
@@ -133,14 +147,12 @@ namespace RimWorldChildren
 		//
 		// Methods
 		//
-
 		public void DoBirthSpawn (Pawn mother, Pawn father, float chance_successful = 1.0f)
 		{
 			if (mother == null) {
 				Log.Error ("No mother defined");
 				return;
 			}
-
 			if (father == null) {
 				Log.Warning ("No father defined");
 			}
@@ -162,10 +174,10 @@ namespace RimWorldChildren
 
 			if (mother.RaceProps.Humanlike) {
 				// Add mom's traits to the pool
-				foreach (Trait momtrait in mother.story.traits.allTraits) traitpool.Add (momtrait);
+				foreach (Trait momtrait in mother.story.traits.allTraits) { traitpool.Add (momtrait); }
 				if (father != null) {
 					// Add dad's traits to the pool
-					foreach (Trait dadtrait in father.story.traits.allTraits) traitpool.Add (dadtrait);
+					foreach (Trait dadtrait in father.story.traits.allTraits) { traitpool.Add (dadtrait); }
 					// Blend skin colour between mom and dad
 					skin_whiteness = Rand.Range (mother.story.melanin, father.story.melanin);
 				}
@@ -179,21 +191,40 @@ namespace RimWorldChildren
 					foreach (Trait trait in traitpool.ToArray()) {
 						bool is_genetic = false;
 						foreach (TraitDef gentrait in genetic_traits) {
-							if (gentrait.defName == trait.def.defName)
+							if (gentrait.defName == trait.def.defName){
 								is_genetic = true;
+							} 
 						}
-						if (!is_genetic)
+						if (!is_genetic) {
 							traitpool.Remove (trait);
+						}
 					}
 				}
 			}
+
+			// Todo: Perhaps add a way to pass on the parent's body build
+			// Best way to do it might be to represent thin/fat/normal/hulk
+			// as a pair of two values, strength and weight
+			// For example, if the mother has an average body type, she would
+			// have a strength of .5f and a weight of .5f. A fat pawn would have
+			// a strength of .5f and a weight of .75f. A thin pawn would have a
+			// strength of .25f and a weight of .25f. A hulk pawn would have 
+			// strength of .75f and weight of .75f
+			//List<float> strength_pool = new List<float>();
+			//List<float> weight_pool = new List<float>();
+
+			//// Get mother and fathers info here if possible
+
+			//float avg_strength = strength_pool.Average();
+			//float avg_weight = weight_pool.Average();
 
 			// Surname passing
 			string last_name = null;
 			if (mother.RaceProps.Humanlike) {
 				if (father == null) {
 					last_name = NameTriple.FromString (mother.Name.ToStringFull).Last;
-				} else {
+				} 
+				else {
 					last_name = NameTriple.FromString (father.Name.ToStringFull).Last;
 				}
 				//Log.Message ("Debug: Newborn is born to the " + last_name + " family.");
@@ -215,18 +246,19 @@ namespace RimWorldChildren
 							baby.relations.AddDirectRelation (PawnRelationDefOf.Parent, father);
 						}
 					}
+
 					// Good until otherwise proven bad
 					bool successful_birth = true;
 					var disabledBaby = BackstoryDatabase.allBackstories ["CustomBackstory_NA_Childhood_Disabled"];
-					if (disabledBaby != null)
+					if (disabledBaby != null) {
 						baby.story.childhood = disabledBaby;
+					}
 					else {
 						Log.Error ("Couldn't find the required Backstory: CustomBackstory_NA_Childhood_Disabled!");
 						baby.story.childhood = null;
 					}
 					baby.story.adulthood = null;
 					baby.workSettings.Disable (WorkTypeDefOf.Hunting); //hushes up the "has no ranged weapon" alert
-
 					// remove all traits
 					baby.story.traits.allTraits.Clear ();
 
@@ -234,16 +266,18 @@ namespace RimWorldChildren
 					if (traitpool.Count > 0) {
 						for(int j = 0; j != 2; j++){
 							Trait gentrait = traitpool.RandomElement ();
-							if(!baby.story.traits.HasTrait(gentrait.def))
+							if(!baby.story.traits.HasTrait(gentrait.def)){
 								baby.story.traits.GainTrait (gentrait);
+							}
 						}
 					}
-						
 					// Move the baby in front of the mother, rather than on top
-					if(mother.CurrentBed() != null)
+					if (mother.CurrentBed() != null) {
 						baby.Position = baby.Position + new IntVec3 (0, 0, 1).RotatedBy (mother.CurrentBed().Rotation);
-//					else
-//						baby.Position = baby.Position + new IntVec3 (0, 0, 1).RotatedBy (mother.Rotation);
+					}
+					// else {
+					//	 baby.Position = baby.Position + new IntVec3 (0, 0, 1).RotatedBy (mother.Rotation);
+					// }
 					
 					// The baby died from bad chance of success
 					if (Rand.Value > chance_successful || chance_successful == 0) {
@@ -251,7 +285,7 @@ namespace RimWorldChildren
 					}
 
 					// Birth defects via drugs or alcohol
-					if(mother.health.hediffSet.HasHediff(HediffDef.Named("BirthDefectTracker"))){
+					if (mother.health.hediffSet.HasHediff(HediffDef.Named("BirthDefectTracker"))){
 						Hediff_BirthDefectTracker tracker = (Hediff_BirthDefectTracker)mother.health.hediffSet.GetFirstHediffOfDef (HediffDef.Named ("BirthDefectTracker"));
 						// The baby died in utero from chemical affect
 						if (tracker.stillbirth){
@@ -272,27 +306,27 @@ namespace RimWorldChildren
 							}
 						}
 					}
-
-					if (father != null) {
-						// Inbred?
-						if (mother.relations.FamilyByBlood.Contains<Pawn> (father)) {
-							// 50% chance to get a birth defect from inbreeding
-							if (Rand.Range(0,1) == 1){
-								GiveRandomBirthDefect (baby);
-								if (baby.health.hediffSet.HasHediff (HediffDef.Named ("DefectStillborn"))) {
-									successful_birth = false;
-								}
+					
+					// Inbred?
+					if (father != null && mother.relations.FamilyByBlood.Contains<Pawn> (father)) {
+						// 50% chance to get a birth defect from inbreeding
+						if (Rand.Range(0,1) == 1){
+							GiveRandomBirthDefect (baby);
+							if (baby.health.hediffSet.HasHediff (HediffDef.Named ("DefectStillborn"))) {
+								successful_birth = false;
 							}
-						}
-						if (successful_birth == true) {
-							// The father is happy the baby was born
-							//father.needs.mood.thoughts.memories.TryGainMemoryThought (ThoughtDef.Named ("PartnerGaveBirth"));
-							father.needs.mood.thoughts.memories.TryGainMemory (ThoughtDef.Named ("PartnerGaveBirth"));
 						}
 					}
 
+					
+
 					// The baby was born! Yay!
 					if (successful_birth == true) {
+						// Give father a happy memory if the birth was successful and he's not dead
+						if (father != null && !father.health.Dead) {
+							// The father is happy the baby was born
+							father.needs.mood.thoughts.memories.TryGainMemory(ThoughtDef.Named("PartnerGaveBirth"));
+						}
 
 						// Send a message that the baby was born
 						if (mother.health.hediffSet.GetFirstHediffOfDef (HediffDef.Named ("HumanPregnancy")).Visible && PawnUtility.ShouldSendNotificationAbout (mother)) {
@@ -305,16 +339,18 @@ namespace RimWorldChildren
 
 						// Try to give PPD. If not, give "New baby" thought
 						float chance = 0.2f;
-						if (mother.story.traits.HasTrait (TraitDefOf.Psychopath))
-							chance -= 1;
-
+						if (mother.story.traits.HasTrait (TraitDefOf.Psychopath)) {
+							   chance -= 1;
+						}
 						if (mother.story.traits.HasTrait (TraitDef.Named ("Nerves"))) {
 							chance -= 0.2f * mother.story.traits.GetTrait (TraitDef.Named ("Nerves")).Degree;
 						} else if (mother.story.traits.HasTrait (TraitDef.Named ("NaturalMood"))) {
-							if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == 2)
+							if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == 2) {
 								chance -= 1;
-							if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == -2)
+							}
+							if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == -2) {
 								chance += 0.6f;
+							}
 							// For some reason this is broken
 							/*} else if (mother.story.traits.HasTrait (TraitDef.Named ("Neurotic"))) {
 							if (mother.story.traits.GetTrait (TraitDef.Named ("Neurotic")).Degree == 1) {
@@ -324,10 +360,13 @@ namespace RimWorldChildren
 						}
 
 						// Because for whatever dumb reason the Math class doesn't have a Clamp method
-						if (chance < 0)
+						if (chance < 0) {
 							chance = 0;
-						if (chance > 1)
+						}
+
+						if (chance > 1) {
 							chance = 1;
+						}
 						Log.Message ("Debugging: Chance of PPD is " + chance * 100 + "%");
 
 
@@ -336,36 +375,42 @@ namespace RimWorldChildren
 							mother.needs.mood.thoughts.memories.TryGainMemory (ThoughtDef.Named ("PostPartumDepression"), null);
 							bool verybad = false;
 							if (mother.story.traits.HasTrait (TraitDef.Named ("NaturalMood"))) {
-								if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == -2)
+								if (mother.story.traits.GetTrait (TraitDef.Named ("NaturalMood")).Degree == -2) {
 									verybad = true;
+								}
 							} else if (mother.story.traits.HasTrait (TraitDef.Named ("Neurotic"))) {
-								if (mother.story.traits.GetTrait (TraitDef.Named ("Neurotic")).Degree == 2)
+								if (mother.story.traits.GetTrait (TraitDef.Named ("Neurotic")).Degree == 2) {
 									verybad = true;
+								}
 							}
 							// This pawn gets an exceptionally bad case of PPD
 							if (verybad) {
 								foreach (Thought_Memory thought in mother.needs.mood.thoughts.memories.Memories) {
-									if (thought.def.defName == "PostPartumDepression")
+									if (thought.def.defName == "PostPartumDepression") {
 										thought.SetForcedStage (thought.CurStageIndex + 1);
+									}
 								}
 							}
 						} else {
 							// If we didn't get PPD, then the pawn gets a mood buff
 							if (mother.health.hediffSet.HasHediff (HediffDef.Named ("GaveBirthFlag")) == false) {
 								mother.needs.mood.thoughts.memories.TryGainMemory (ThoughtDef.Named ("IGaveBirthFirstTime"));
-							} else
+							} 
+							else {
 								mother.needs.mood.thoughts.memories.TryGainMemory (ThoughtDef.Named ("IGaveBirth"));
+							}
 						}
 					}
-
-					// The birth was not successful
-					if(successful_birth == false)
+					else
 					{
 						bool aborted = false;
-						if(chance_successful < 0f)
+						if (chance_successful < 0f)
+						{
 							aborted = true;
-						if (baby != null) {
-							Miscarry (baby, aborted);
+						}
+						if (baby != null)
+						{
+							Miscarry(baby, aborted);
 						}
 					}
 				}
@@ -373,17 +418,18 @@ namespace RimWorldChildren
 					Find.WorldPawns.PassToWorld (baby, PawnDiscardDecideMode.Discard);
 				}
 			}
-
+			// Post birth
 			if (mother.Spawned) {
 				// Spawn guck
 				FilthMaker.MakeFilth (mother.Position, mother.Map, ThingDefOf.FilthAmnioticFluid, mother.LabelIndefinite (), 5);
 				if (mother.caller != null) {
 					mother.caller.DoCall ();
 				}
-				if(baby != null)
+				if(baby != null) {
 					if (baby.caller != null) {
 						baby.caller.DoCall ();
 					}
+				}
 
 				Log.Message ("Birth quality = " + birthing_quality);
 				// Possible tearing from pregnancy
@@ -393,8 +439,9 @@ namespace RimWorldChildren
 						if (birthing_quality < Rand.Value) {
 							mother.health.AddHediff (HediffDef.Named ("PregnancyTearMajor"), ChildrenUtility.GetPawnBodyPart (mother, "Torso"), null);
 						}
-						else
+						else {
 							mother.health.AddHediff (HediffDef.Named ("PregnancyTear"), ChildrenUtility.GetPawnBodyPart (mother, "Torso"), null);
+						}
 					}
 				}
 			}
@@ -407,7 +454,7 @@ namespace RimWorldChildren
 			StringBuilder stringBuilder = new StringBuilder ();
 			stringBuilder.Append (base.DebugString ());
 			stringBuilder.AppendLine ("Gestation progress: " + this.GestationProgress.ToStringPercent ());
-			stringBuilder.AppendLine ("Time left: " + ((int)((1 - this.GestationProgress) * this.pawn.RaceProps.gestationPeriodDays * 60000)).ToStringTicksToPeriod (true));
+			stringBuilder.AppendLine ("Time left: " + ((int)((1 - this.GestationProgress) * this.pawn.RaceProps.gestationPeriodDays * TicksPerDay)).ToStringTicksToPeriod (true));
 			return stringBuilder.ToString ();
 		}
 
@@ -469,7 +516,7 @@ namespace RimWorldChildren
 			
 			this.ageTicks++;
 			if (this.pawn.IsHashIntervalTick (1000)) {
-				if (this.pawn.needs.food != null && this.pawn.needs.food.CurCategory == HungerCategory.Starving && Rand.MTBEventOccurs (0.5f, 60000, 1000)) {
+				if (this.pawn.needs.food != null && this.pawn.needs.food.CurCategory == HungerCategory.Starving && Rand.MTBEventOccurs (0.5f, TicksPerDay, MiscarryCheckInterval)) {
 					if (this.Visible && PawnUtility.ShouldSendNotificationAbout (this.pawn)) {
 						Messages.Message ("MessageMiscarriedStarvation".Translate (new object[] {
 							this.pawn.LabelIndefinite ()
@@ -478,7 +525,7 @@ namespace RimWorldChildren
 					Miscarry (false);
 					return;
 				}
-				if (this.IsSeverelyWounded && Rand.MTBEventOccurs (0.5f, 60000, 1000)) {
+				if (this.IsSeverelyWounded && Rand.MTBEventOccurs (0.5f, TicksPerDay, MiscarryCheckInterval)) {
 					if (this.Visible && PawnUtility.ShouldSendNotificationAbout (this.pawn)) {
 						Messages.Message ("MessageMiscarriedPoorHealth".Translate (new object[] {
 							this.pawn.LabelIndefinite ()
@@ -488,12 +535,21 @@ namespace RimWorldChildren
 					return;
 				}
 			}
-			GestationProgress += 1 / (pawn.RaceProps.gestationPeriodDays * 60000);
 
-			// Discover from 
+			GestationProgress += (1.0f) / (pawn.RaceProps.gestationPeriodDays * TicksPerDay);
+
+			// Check if pregnancy is far enough along to "show" for the body type
 			if (!is_discovered) {
-				if ((GestationProgress > 0.25f && pawn.story.bodyType != BodyType.Fat) || (GestationProgress > 0.1f && pawn.story.bodyType == BodyType.Thin)) {
-					DiscoverPregnancy ();
+				if (
+					(pawn.story.bodyType == BodyType.Female && GestationProgress > 0.389f) ||
+					(pawn.story.bodyType == BodyType.Thin && GestationProgress > 0.375f) ||
+					((pawn.story.bodyType == BodyType.Fat || pawn.story.bodyType == BodyType.Hulk) && 
+						GestationProgress > 0.50f)) {
+					// Got the numbers by dividing the average show time (in weeks) per body type by 36
+					// (36 weeks being the real human gestation period)
+					// https://www.momtricks.com/pregnancy/when-do-you-start-showing-in-pregnancy/
+
+					DiscoverPregnancy();
 				}
 			}
 

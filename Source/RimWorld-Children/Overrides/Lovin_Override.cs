@@ -36,15 +36,12 @@ namespace RimWorldChildren
 		}
 
 		internal static void TryToImpregnate(Pawn initiator, Pawn partner){
+            // Lesbian/gay couples. Those cases should never result in pregnancy
+            if(initiator.gender == partner.gender)
+                return;
 
-			// default
-			Pawn male = initiator;
-			Pawn female = partner;
-			// Find out who's who
-			if(initiator.gender != partner.gender && partner.gender == Gender.Male){
-				male = partner;
-				female = initiator;
-			}
+            Pawn male = initiator.gender == Gender.Male? initiator: partner;
+			Pawn female = initiator.gender == Gender.Female ? initiator : partner;
 
 			// Only humans can be impregnated for now
 			if (female.def.defName != "Human")
@@ -75,9 +72,7 @@ namespace RimWorldChildren
 
 			// Do the actual impregnation. We apply it to the torso because Remove_Hediff in operations doesn't work on WholeBody (null body part)
 			// for whatever reason.
-			Hediff_HumanPregnancy hediff_Pregnant = (Hediff_HumanPregnancy)HediffMaker.MakeHediff (HediffDef.Named("HumanPregnancy"), female, torso);
-			hediff_Pregnant.father = male;
-			female.health.AddHediff (hediff_Pregnant, torso, null);
+			female.health.AddHediff (Hediff_HumanPregnancy.Create(female, male), torso);
 		}
 	}
 
