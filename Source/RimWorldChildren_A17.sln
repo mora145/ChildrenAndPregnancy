@@ -1,6 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 5.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RimWorldChildren_A17", "RimWorld-Children\RimWorldChildren_A17.csproj", "{99CE67A2-D50A-4528-AEFD-51CFDE02C9C4}"
 EndProject
 Global

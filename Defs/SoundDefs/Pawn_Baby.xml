@@ -17,7 +17,8 @@
           <li Class="AudioGrain_Clip">
             <clipPath>Baby/Cry3</clipPath>
           </li>
-        </grains>      
+        </grains>
+      	<sustainLoop>False</sustainLoop>      	
         <volumeRange>
           <min>15</min>        
           <max>20</max>

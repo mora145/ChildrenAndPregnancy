@@ -68,17 +68,6 @@ namespace RimWorldChildren
 	internal static class HarmonyPatches{
 
 		static HarmonyPatches(){
-			
-			bool hugsLibFound = false;
-			foreach(ModMetaData mod in ModLister.AllInstalledMods){
-				if(mod.Name.Contains("HugsLib")){
-					hugsLibFound = true;
-				}
-			}
-			if(!hugsLibFound){
-				Messages.Message("Error initializing Children and Pregnancy: Dependancy HugsLib not found. Mod will NOT function correctly.", TargetInfo.Invalid, MessageSound.SeriousAlert);
-				return;
-			}
 
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
 			HarmonyInstance.DEBUG = false;
