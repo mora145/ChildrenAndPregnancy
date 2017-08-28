@@ -17,7 +17,6 @@ namespace RimWorldChildren
 		static IEnumerable<CodeInstruction> JobDriver_Lovin_M92_Transpiler(IEnumerable<CodeInstruction> instructions){
 			List<CodeInstruction> ILs = instructions.ToList ();
 			Type iterator = typeof(JobDriver_Lovin).GetNestedType ("<MakeNewToils>c__Iterator32", AccessTools.all);
-			Log.Message (AccessTools.Property(typeof(JobDriver_Lovin), "Partner").GetGetMethod(true).ToString());
 			int injectIndex = ILs.FindIndex (IL => IL.opcode == OpCodes.Ret);
 			List<CodeInstruction> injection = new List<CodeInstruction> {
 				new CodeInstruction(OpCodes.Ldarg_0),

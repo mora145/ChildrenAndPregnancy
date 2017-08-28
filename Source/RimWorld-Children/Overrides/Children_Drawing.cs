@@ -97,11 +97,17 @@ namespace RimWorldChildren
 
 			// Ensure pawn is a child or higher before drawing head
 			int injectIndex2 = ILs.FindIndex (x => x.opcode == OpCodes.Ldfld && x.operand == AccessTools.Field (typeof(PawnGraphicSet), "headGraphic")) + 2;
+			Label notHumanJump = ILgen.DefineLabel ();
 			List<CodeInstruction> injection2 = new List<CodeInstruction> {
+				new CodeInstruction (OpCodes.Ldarg_0),
+				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
+				new CodeInstruction (OpCodes.Call, typeof(Children_Drawing).GetMethod("EnsurePawnIsHuman")),
+				new CodeInstruction (OpCodes.Brfalse, notHumanJump),
 				new CodeInstruction (OpCodes.Ldarg_0),
 				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
 				new CodeInstruction (OpCodes.Call, typeof(Children_Drawing).GetMethod("EnsurePawnIsChildOrOlder")),
 				new CodeInstruction (OpCodes.Brfalse, ILs [injectIndex2 - 1].operand),
+				new CodeInstruction (OpCodes.Nop){labels = new List<Label>{notHumanJump}},
 			};
 			ILs.InsertRange (injectIndex2, injection2);
 
@@ -261,6 +267,11 @@ namespace RimWorldChildren
 		}
 		public static bool EnsurePawnIsChildOrOlder(Pawn pawn){
 			if(pawn.ageTracker.CurLifeStageIndex >= AgeStage.Child)
+				return true;
+			return false;
+		}
+		public static bool EnsurePawnIsHuman(Pawn pawn){
+			if(pawn.def.defName == "Human")
 				return true;
 			return false;
 		}
