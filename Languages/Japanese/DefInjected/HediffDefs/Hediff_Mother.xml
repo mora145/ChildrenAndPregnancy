@@ -31,6 +31,7 @@
   <PlacentaBleed.injuryProps.destroyedLabel>胎盤出血</PlacentaBleed.injuryProps.destroyedLabel>
 
   <PostPregnancy.label>出産からの回復</PostPregnancy.label>
+  <Lactating.label>授乳中</Lactating.label>
 
   <GaveBirthFlag.label>出産経験済</GaveBirthFlag.label>
   <GaveBirthFlag.stages.0.label>妊娠兆候</GaveBirthFlag.stages.0.label>
