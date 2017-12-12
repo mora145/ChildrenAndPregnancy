@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 namespace RimWorldChildren
 {
+	// Child discipline is given from a social fight, so it doesn't use a workgiver
+	
 	public class JobDriver_DisciplineChild : JobDriver
 	{
 		//

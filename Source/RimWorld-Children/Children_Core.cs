@@ -244,7 +244,6 @@ namespace RimWorldChildren
 			List<CodeInstruction> ILs = instructions.ToList ();
 
 			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Ldfld && IL.operand.ToStringSafe().Contains("Pawn_EquipmentTracker")) - 1;
-			Log.Message(index.ToString());
 			
 			MethodInfo giveChildWeapons = typeof(ChildrenUtility).GetMethod("FilterChildWeapons", AccessTools.all);
 			var injection = new List<CodeInstruction> {
@@ -254,10 +253,6 @@ namespace RimWorldChildren
 				new CodeInstruction(OpCodes.Stloc_2),
 			};
 			ILs.InsertRange (index, injection);
-			//Debug
-			foreach(CodeInstruction IL in ILs){
-				Log.Message(IL.opcode.ToStringSafe() + " " + IL.operand.ToStringSafe());
-			};
 
 			foreach (CodeInstruction instruction in ILs) {
 				yield return instruction;

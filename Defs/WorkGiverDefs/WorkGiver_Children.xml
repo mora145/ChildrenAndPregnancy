@@ -2,16 +2,42 @@
 <WorkGivers>
   
   <WorkGiverDef>
-    <defName>DoBreastfeedBaby</defName>
-    <label>brastfeed baby</label>
-    <giverClass>RimWorldChildren.WorkGiver_BreastfeedBaby</giverClass>
-    <workType>Doctor</workType>
-    <verb>breastfeed baby</verb>
-    <gerund>breastfeeding baby</gerund>
-    <priorityInType>65</priorityInType>
-    <requiredCapacities>
-      <li>Manipulation</li>
-    </requiredCapacities>
+	<defName>DoBreastfeedBaby</defName>
+	<label>breastfeed baby</label>
+	<giverClass>RimWorldChildren.WorkGiver_BreastfeedBaby</giverClass>
+	<workType>Childcare</workType>
+	<verb>breastfeed baby</verb>
+	<gerund>breastfeeding baby</gerund>
+	<priorityInType>75</priorityInType>
+	<requiredCapacities>
+	  <li>Manipulation</li>
+	</requiredCapacities>
+  </WorkGiverDef>
+	
+  <WorkGiverDef>
+	<defName>FeedBaby</defName>
+	<label>feed baby</label>
+	<giverClass>RimWorldChildren.WorkGiver_FeedBaby</giverClass>
+	<workType>Childcare</workType>
+	<verb>feed baby</verb>
+	<gerund>feeding baby</gerund>
+	<priorityInType>65</priorityInType>
+	<requiredCapacities>
+	  <li>Manipulation</li>
+	</requiredCapacities>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+	<defName>PlayWithBaby</defName>
+	<label>play with baby</label>
+	<giverClass>RimWorldChildren.WorkGiver_PlayWithBaby</giverClass>
+	<workType>Childcare</workType>
+	<verb>play with baby</verb>
+	<gerund>playing with baby</gerund>
+	<priorityInType>50</priorityInType>
+	<requiredCapacities>
+	  <li>Manipulation</li>
+	</requiredCapacities>
   </WorkGiverDef>
   
 </WorkGivers>
