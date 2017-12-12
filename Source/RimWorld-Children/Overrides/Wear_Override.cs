@@ -25,7 +25,7 @@ namespace RimWorldChildren
 			ILs [index].labels.Clear ();
 			ILs.Insert(index, newJump2);
 			index++;
-			ILs.Insert(index, new CodeInstruction(OpCodes.Ldfld, typeof(JobDriver_Wear).GetNestedType("<MakeNewToils>c__Iterator54", AccessTools.all).GetField("<>f__this", AccessTools.all) ) );
+			ILs.Insert(index, new CodeInstruction(OpCodes.Ldfld, typeof(JobDriver_Wear).GetNestedType("<MakeNewToils>c__Iterator0", AccessTools.all).GetField("$this", AccessTools.all) ) );
 			index++;
 			ILs.Insert(index, new CodeInstruction(OpCodes.Call, failOnBaby));
 			index++;

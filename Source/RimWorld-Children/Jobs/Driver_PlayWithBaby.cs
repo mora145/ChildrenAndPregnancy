@@ -66,7 +66,7 @@ namespace RimWorldChildren
 		{
 			get
 			{
-				return (Pawn)CurJob.GetTarget(TargetIndex.A).Thing;
+				return (Pawn)job.GetTarget(TargetIndex.A).Thing;
 			}
 		}
 
@@ -74,8 +74,13 @@ namespace RimWorldChildren
 		{
 			get
 			{
-				return CurJob.GetTarget(TargetIndex.B).Thing;
+				return job.GetTarget(TargetIndex.B).Thing;
 			}
+		}
+		
+		public override bool TryMakePreToilReservations()
+		{
+			return this.pawn.Reserve(this.Baby, this.job, 1, -1, null);
 		}
 
 		[DebuggerHidden]
@@ -102,13 +107,14 @@ namespace RimWorldChildren
 			{
 				tickAction = delegate
 				{
-					Baby.needs.joy.GainJoy(CurJob.def.joyGainRate * 0.000144f, CurJob.def.joyKind);
+					Baby.needs.joy.GainJoy(job.def.joyGainRate * 0.000144f, job.def.joyKind);
 					if (pawn.IsHashIntervalTick(320))
 					{
 						InteractionDef intDef = (Rand.Value >= 0.8f) ? InteractionDefOf.DeepTalk : InteractionDefOf.Chitchat;
 						pawn.interactions.TryInteractWith(Baby, intDef);
 					}
-					pawn.Drawer.rotator.FaceCell(Baby.Position);
+					pawn.rotationTracker.FaceCell(Baby.Position);
+					
 					pawn.GainComfortFromCellIfPossible();
 					JoyUtility.JoyTickCheckEnd (pawn, JoyTickFullJoyAction.None);
 					if (pawn.needs.joy.CurLevelPercentage > 0.9999f && Baby.needs.joy.CurLevelPercentage > 0.9999f)
@@ -118,7 +124,7 @@ namespace RimWorldChildren
 				},
 				socialMode = RandomSocialMode.Off,
 				defaultCompleteMode = ToilCompleteMode.Delay,
-				defaultDuration = CurJob.def.joyDuration
+				defaultDuration = job.def.joyDuration
 			};
 		}
 	}

@@ -22,6 +22,11 @@ namespace RimWorldChildren
 				return (Pawn)TargetA.Thing;
 			}
 		}
+		
+		public override bool TryMakePreToilReservations()
+		{
+			return this.pawn.Reserve(this.Victim, this.job, 1, -1, null);
+		}
 
 		public override void ExposeData ()
 		{

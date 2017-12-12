@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-
-<Contraceptive>
+<Defs>
     <ThingDef ParentName="MakeableDrugPillBase">
     <defName>Contraceptive</defName>
     <label>contraceptive</label>
@@ -45,4 +44,4 @@
     </comps>
   </ThingDef>
   
-</Contraceptive>
+</Defs>

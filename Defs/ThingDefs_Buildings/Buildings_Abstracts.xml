@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Buildings>
+<Defs>
   
   <ThingDef Name="BuildingBase" Abstract="True">
     <category>Building</category>
@@ -19,11 +19,11 @@
         <compClass>CompQuality</compClass>
       </li>
     </comps>
-    <DesignationCategory>Furniture</DesignationCategory>
+    <designationCategory>Furniture</designationCategory>
     <minifiedDef>MinifiedFurniture</minifiedDef>
     <tradeTags>
       <li>Furniture</li>
     </tradeTags>
   </ThingDef>
 
-</Buildings>
+</Defs>

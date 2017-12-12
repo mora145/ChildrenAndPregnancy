@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Buildings>
+<Defs>
   
   <ThingDef ParentName="FurnitureBase">
     <defName>Crib</defName>
     <label>crib</label>
-    <Description>A cute little crib perfect to keep a young child safe and warm at night.</Description>
-    <ThingClass>Building_Bed</ThingClass>
+    <description>A cute little crib perfect to keep a young child safe and warm at night.</description>
+    <thingClass>Building_Bed</thingClass>
     <graphicData>
       <texPath>Things/Building/Furniture/Crib/crib</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
@@ -15,7 +15,7 @@
         <rect>(0,0.05,1,1)</rect>
       </damageData>
     </graphicData>
-    <AltitudeLayer>Building</AltitudeLayer>
+    <altitudeLayer>Building</altitudeLayer>
     <statBases>
       <MaxHitPoints>100</MaxHitPoints>
       <Flammability>1.0</Flammability>
@@ -26,7 +26,7 @@
       <Comfort>0.8</Comfort>
       <ImmunityGainSpeedFactor>1.1</ImmunityGainSpeedFactor>
     </statBases>
-    <Size>(1,1)</Size>
+    <size>(1,1)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Woody</li>
@@ -34,7 +34,7 @@
     </stuffCategories>
     <costStuffCount>30</costStuffCount>
     <building>
-      <Bed_ShowSleeperBody>False</Bed_ShowSleeperBody>
+      <bed_showSleeperBody>False</bed_showSleeperBody>
       <bed_healPerDay>7</bed_healPerDay>
       <bed_maxBodySize>0.55</bed_maxBodySize>
     </building>
@@ -49,15 +49,15 @@
       </li>
     </comps>
     <fillPercent>0.4</fillPercent>
-    <PathCost>60</PathCost>
-    <StaticSunShadowHeight>0.17</StaticSunShadowHeight>
-    <CastEdgeShadows>True</CastEdgeShadows>
+    <pathCost>60</pathCost>
+    <staticSunShadowHeight>0.17</staticSunShadowHeight>
+    <castEdgeShadows>True</castEdgeShadows>
     <designationHotKey>Misc2</designationHotKey>
-    <Passability>PassThroughOnly</Passability>
-    <DrawGUIOverlay>True</DrawGUIOverlay>
+    <passability>PassThroughOnly</passability>
+    <drawGUIOverlay>True</drawGUIOverlay>
     <placeWorkers>
       <li>PlaceWorker_ShowFacilitiesConnections</li>
     </placeWorkers>
   </ThingDef>
 
-</Buildings>
+</Defs>

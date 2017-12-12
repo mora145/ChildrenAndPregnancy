@@ -110,7 +110,8 @@ namespace RimWorldChildren
 				new CodeInstruction (OpCodes.Nop){labels = new List<Label>{notHumanJump}},
 			};
 			ILs.InsertRange (injectIndex2, injection2);
-
+			
+			//TODO: Fix the rendering injections
 			// Modify the scale of a hat graphic when worn by a child
 			int injectIndex3 = ILs.GetRange(injectIndex2, ILs.Count - injectIndex2).FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand is LocalBuilder && ((LocalBuilder)x.operand).LocalIndex == 16) + 1;
 			List<CodeInstruction> injection3 = new List<CodeInstruction> {

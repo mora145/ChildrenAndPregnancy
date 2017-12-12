@@ -63,9 +63,9 @@ namespace RimWorldChildren
 			int index = ILs.FindIndex (x => x.opcode == OpCodes.Brfalse);
 			List<CodeInstruction> injection = new List<CodeInstruction> {
 				new CodeInstruction(OpCodes.Ldarg_0),
-				new CodeInstruction(OpCodes.Ldfld, typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator155", AccessTools.all).GetField("myPawn", AccessTools.all)),
+				new CodeInstruction(OpCodes.Ldfld, typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetField("myPawn", AccessTools.all)),
 				new CodeInstruction(OpCodes.Ldarg_0),
-				new CodeInstruction(OpCodes.Ldfld, typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator155", AccessTools.all).GetField("<>f__this", AccessTools.all)),
+				new CodeInstruction(OpCodes.Ldfld, typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetField("$this", AccessTools.all)),
 				new CodeInstruction(OpCodes.Ldfld, typeof(Building_Bed).GetField("def")),
 				new CodeInstruction(OpCodes.Call, typeof(RestUtility).GetMethod("CanUseBedEver")),
 				new CodeInstruction(OpCodes.Brfalse, ILs[index].operand),

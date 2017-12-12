@@ -84,16 +84,16 @@ namespace RimWorldChildren
 		static HarmonyPatches(){
 
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
-			HarmonyInstance.DEBUG = false;
+			HarmonyInstance.DEBUG = true;
 
-			MethodInfo jobdriver_lovin_m92_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M92_Transpiler");
-			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__92", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m92_transpiler));
+			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
+			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
 
 			MethodInfo jobdriver_wear_transpiler = AccessTools.Method (typeof(Wear_Override), "JobDriver_Wear_MoveNext_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Wear).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, null, new HarmonyMethod (jobdriver_wear_transpiler));
-
+			
 			MethodInfo bed_floatoptions_movenext_transpiler = AccessTools.Method (typeof(BedHarmonyPatches), "GetFloatMenuOptions_Transpiler");
-			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator155", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
+			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
 		}
 	}
 
@@ -229,7 +229,7 @@ namespace RimWorldChildren
 		internal static void Notify_EquipmentAdded_Patch(ref ThingWithComps eq, ref Pawn_EquipmentTracker __instance){
 			Pawn pawn = __instance.ParentHolder as Pawn;
 			if (pawn != null && pawn.def.defName == "Human" && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
-				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}),MessageSound.Negative );
+				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}), MessageTypeDefOf.CautionInput);
 			}
 		}
 	}

@@ -51,16 +51,18 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\RimWorld1557Win_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorld1722Win_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HugsLib">
       <HintPath>..\..\..\HugsLib\Assemblies\HugsLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\RimWorld1722Win_Data\Managed\System.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\RimWorld1557Win_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorld1722Win_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

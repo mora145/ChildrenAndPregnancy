@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RecipeDefs>
+<Defs>
     
   <RecipeDef>
     <defName>DeterminePregnancy</defName>
@@ -19,11 +19,8 @@
       <li>Human</li>
     </recipeUsers>
     <skillRequirements>
-      <li>
-	<skill>Medicine</skill>
-	<minLevel>5</minLevel>
-      </li>
+		<Medicine>5</Medicine>
     </skillRequirements>
   </RecipeDef>
   
-</RecipeDefs>
+</Defs>

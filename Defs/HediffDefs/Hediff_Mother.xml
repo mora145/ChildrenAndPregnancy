@@ -181,9 +181,17 @@
     <stages>
       <li>
         <label>initial-hidden</label>
-        <everVisible>false</everVisible>
+        <becomeVisible>false</becomeVisible>
       </li>
     </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>Sterile</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>sterile</label>
+    <initialSeverity>0.001</initialSeverity>
+    <defaultLabelColor>(1.0, 1.0, 1.0)</defaultLabelColor>
   </HediffDef>
   
 </Defs>

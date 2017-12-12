@@ -53,13 +53,13 @@
     <initialSeverity>0.001</initialSeverity>
     <stages>
       <li>
-	<everVisible>false</everVisible>
-	<capMods>
-	  <li>
-	    <capacity>Manipulation</capacity>
-	    <setMax>0.0</setMax>
-	  </li>
-	</capMods>
+		<becomeVisible>false</becomeVisible>
+		<capMods>
+		  <li>
+		    <capacity>Manipulation</capacity>
+		    <setMax>0.0</setMax>
+		  </li>
+		</capMods>
       </li>
     </stages>
   </HediffDef>
