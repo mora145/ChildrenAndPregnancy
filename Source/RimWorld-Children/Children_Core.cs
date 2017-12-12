@@ -15,7 +15,7 @@ namespace RimWorldChildren
 	{
 		public override string ModIdentifier {
 			get {
-				return "Children_and_Pregnancy";
+				return "Children_and_Pregnancy_testing";
 			}
 		}
 	}
@@ -32,6 +32,8 @@ namespace RimWorldChildren
 	public static class ChildrenUtility{
 
 		public static float ChildMaxWeaponMass(Pawn pawn){
+			if(pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager)
+				return 999;
 			const float baseMass = 2.5f;
 			return (pawn.skills.GetSkill (SkillDefOf.Shooting).Level * 0.1f) + baseMass;
 		}
@@ -61,6 +63,18 @@ namespace RimWorldChildren
 		internal static BodyPartRecord GetPawnBodyPart(Pawn pawn, String bodyPart)
 		{
 			return pawn.RaceProps.body.AllParts.Find (x => x.def == DefDatabase<BodyPartDef>.GetNamed(bodyPart, true));
+		}
+		
+		internal static List<ThingStuffPair> FilterChildWeapons(Pawn pawn, List<ThingStuffPair> weapons)
+		{
+			var weapons_out = new List<ThingStuffPair>();
+			if(weapons.Count > 0)
+				foreach(ThingStuffPair weapon in weapons){
+					if(weapon.thing.BaseMass < ChildMaxWeaponMass(pawn)){
+						weapons_out.Add(weapon);
+					}
+				}
+			return weapons_out;
 		}
 	}
 
@@ -216,6 +230,37 @@ namespace RimWorldChildren
 			Pawn pawn = __instance.ParentHolder as Pawn;
 			if (pawn != null && pawn.def.defName == "Human" && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
 				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}),MessageSound.Negative );
+			}
+		}
+	}
+	
+	// Prevents children from being spawned with weapons too heavy for them
+	[HarmonyPatch(typeof(PawnWeaponGenerator), "TryGenerateWeaponFor")]
+	public static class PawnWeaponGenerator_TryGenerateWeaponFor_Patch
+	{
+		[HarmonyTranspiler]
+		static IEnumerable<CodeInstruction> TryGenerateWeaponFor_Transpiler(IEnumerable<CodeInstruction> instructions)
+		{
+			List<CodeInstruction> ILs = instructions.ToList ();
+
+			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Ldfld && IL.operand.ToStringSafe().Contains("Pawn_EquipmentTracker")) - 1;
+			Log.Message(index.ToString());
+			
+			MethodInfo giveChildWeapons = typeof(ChildrenUtility).GetMethod("FilterChildWeapons", AccessTools.all);
+			var injection = new List<CodeInstruction> {
+				new CodeInstruction(OpCodes.Ldarg_0),
+				new CodeInstruction(OpCodes.Ldloc_2),
+				new CodeInstruction(OpCodes.Callvirt, giveChildWeapons),
+				new CodeInstruction(OpCodes.Stloc_2),
+			};
+			ILs.InsertRange (index, injection);
+			//Debug
+			foreach(CodeInstruction IL in ILs){
+				Log.Message(IL.opcode.ToStringSafe() + " " + IL.operand.ToStringSafe());
+			};
+
+			foreach (CodeInstruction instruction in ILs) {
+				yield return instruction;
 			}
 		}
 	}

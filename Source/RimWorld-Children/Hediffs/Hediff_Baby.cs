@@ -60,9 +60,9 @@ namespace RimWorldChildren
 
 			// Update the Colonist Bar
 			PortraitsCache.SetDirty (pawn);
-			//LongEventHandler.ExecuteWhenFinished (delegate {
+			LongEventHandler.ExecuteWhenFinished (delegate {
 				pawn.Drawer.renderer.graphics.ResolveAllGraphics ();
-			//                                     });
+			                                     });
 
 			// At the toddler stage. Now we can move and talk.
 			if (stage == 1) {
