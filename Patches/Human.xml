@@ -2,20 +2,20 @@
 <Patch>
   
   <Operation Class="PatchOperationReplace">
-    <xpath>/ThingDefs/ThingDef[defName = "Human"]/race/lifeStageAges/li[2]/minAge</xpath>
+    <xpath>/Defs/ThingDef[defName = "Human"]/race/lifeStageAges/li[2]/minAge</xpath>
     <value>
       <minAge>0.5</minAge>
     </value>
   </Operation>
   <Operation Class="PatchOperationReplace">
-    <xpath>/ThingDefs/ThingDef[defName = "Human"]/race/lifeStageAges/li[3]/minAge</xpath>
+    <xpath>/Defs/ThingDef[defName = "Human"]/race/lifeStageAges/li[3]/minAge</xpath>
     <value>
       <minAge>3</minAge>
     </value>
   </Operation>
   
   <Operation Class="PatchOperationReplace">
-    <xpath>/ThingDefs/ThingDef[defName = "Human"]/race/ageGenerationCurve/points</xpath>
+    <xpath>/Defs/ThingDef[defName = "Human"]/race/ageGenerationCurve/points</xpath>
     <value>
       <points>
         <li>(4,0)</li>

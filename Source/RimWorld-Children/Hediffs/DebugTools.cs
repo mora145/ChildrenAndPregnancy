@@ -15,8 +15,8 @@ namespace RimWorldChildren
 				Pawn partner = LovePartnerRelationUtility.GetPartnerInMyBed (pawn);
 				Building_Bed bed = pawn.CurrentBed();
 				if (partner != null) {
-					pawn.mindState.awokeVoluntarily = true;
-					partner.mindState.awokeVoluntarily = true;
+					//pawn.mindState.awokeVoluntarily = true;
+					//partner.mindState.awokeVoluntarily = true;
 					Job lovin = new Job (JobDefOf.Lovin, partner, bed);
 					pawn.jobs.StartJob (lovin, JobCondition.InterruptForced, null, false, true, null);
 				}

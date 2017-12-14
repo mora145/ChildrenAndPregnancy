@@ -20,18 +20,18 @@
   </JobDef>
   
   <JobDef>
+    <defName>BreastfeedBaby</defName>
+    <driverClass>RimWorldChildren.JobDriver_BreastfeedBaby</driverClass>
+    <reportString>Breastfeeding TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
     <defName>PlayWithBaby</defName>
     <driverClass>RimWorldChildren.JobDriver_PlayWithBaby</driverClass>
     <reportString>Playing with TargetA.</reportString>
     <joyDuration>1500</joyDuration>
     <joyGainRate>1</joyGainRate>
     <joyKind>Social</joyKind>
-  </JobDef>
-  
-  <JobDef>
-    <defName>BreastfeedBaby</defName>
-    <driverClass>RimWorldChildren.JobDriver_BreastfeedBaby</driverClass>
-    <reportString>Breastfeeding TargetA.</reportString>
   </JobDef>
   
 </Defs>

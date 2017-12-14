@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Backstories>
+<Defs>
 
   <RimWorldChildren.BackstoryDef>
     <defName>NA_Childhood_Disabled</defName>
-    <Title>Baby</Title>
-    <TitleShort>Baby</TitleShort>
+    <title>Baby</title>
+    <titleShort>Baby</titleShort>
     <baseDescription>Still growing.</baseDescription>
-    <Slot>Childhood</Slot>
-    <WorkDisables>
+    <slot>Childhood</slot>
+    <workDisables>
       <li>Animals</li>
       <li>Artistic</li>
       <li>Caring</li>
@@ -23,51 +23,50 @@
       <li>PlantWork</li>
       <li>Social</li>
       <li>Violent</li>
-    </WorkDisables>
-    <SpawnCategories>
+    </workDisables>
+    <spawnCategories>
       <li>Civil</li>
-    </SpawnCategories>
+    </spawnCategories>
     <shuffleable>false</shuffleable>
   </RimWorldChildren.BackstoryDef>
   
   <RimWorldChildren.BackstoryDef>
     <defName>NA_Childhood</defName>
-    <Title>Child</Title>
-    <TitleShort>Child</TitleShort>
+    <title>Child</title>
+    <titleShort>Child</titleShort>
     <baseDescription>Still growing.</baseDescription>
-    <Slot>Childhood</Slot>
-    <WorkDisables />
-    <SpawnCategories>
+    <slot>Childhood</slot>
+    <workDisables />
+    <spawnCategories>
       <li>Civil</li>
-    </SpawnCategories>
+    </spawnCategories>
     <shuffleable>false</shuffleable>
   </RimWorldChildren.BackstoryDef>
   
   <RimWorldChildren.BackstoryDef>
     <defName>NA_Adulthood</defName>
-    <Title>N/A</Title>
-    <TitleShort>N/A</TitleShort>
+    <title>N/A</title>
+    <titleShort>N/A</titleShort>
     <baseDescription>Not yet applicable</baseDescription>
-    <Slot>Adulthood</Slot>
-    <WorkDisables />
-    <SpawnCategories>
+    <slot>Adulthood</slot>
+    <workDisables />
+    <spawnCategories>
       <li>Civil</li>
-    </SpawnCategories>
+    </spawnCategories>
     <shuffleable>false</shuffleable>
   </RimWorldChildren.BackstoryDef>
   
   <RimWorldChildren.BackstoryDef>
     <defName>Rimchild</defName>
-    <Title>Rimworld child</Title>
-    <TitleShort>Rimchild</TitleShort>
+    <title>Rimworld child</title>
+    <titleShort>Rimchild</titleShort>
     <baseDescription>NAME was born and raised on a rimworld in the outer reaches of the galaxy.</baseDescription>
-    <Slot>Childhood</Slot>
-    <WorkDisables />
-    <SpawnCategories>
+    <slot>Childhood</slot>
+    <workDisables />
+    <spawnCategories>
       <li>Civil</li>
-    </SpawnCategories>
+    </spawnCategories>
     <shuffleable>false</shuffleable>
   </RimWorldChildren.BackstoryDef>
-  
-</Backstories>
 
+</Defs>

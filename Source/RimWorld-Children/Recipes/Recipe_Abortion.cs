@@ -8,7 +8,7 @@ namespace RimWorldChildren
 {
 	public class Recipe_Abortion : Recipe_RemoveHediff
 	{
-		public override void ApplyOnPawn (Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients)
+		public override void ApplyOnPawn (Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			// We don't check if the surgery fails, because even if the surgery is a failure the fetus will still die
 
@@ -18,7 +18,8 @@ namespace RimWorldChildren
 					billDoer,
 					pawn
 				});
-				if (base.CheckSurgeryFail (billDoer, pawn, ingredients, part) == false) {
+				//if (base.CheckSurgeryFail (billDoer, pawn, ingredients, part) == false) {
+				if (base.CheckSurgeryFail (billDoer, pawn, ingredients, part, bill) == false){
 					if (PawnUtility.ShouldSendNotificationAbout (pawn) || PawnUtility.ShouldSendNotificationAbout (billDoer)) {
 						string text;
 						if (!this.recipe.successfullyRemovedHediffMessage.NullOrEmpty ()) {
@@ -31,7 +32,7 @@ namespace RimWorldChildren
 								this.recipe.removesHediff.label
 							});
 						}
-						Messages.Message (text, pawn, MessageSound.Benefit);
+						Messages.Message (text, pawn, MessageTypeDefOf.TaskCompletion);
 					}
 				}
 			}

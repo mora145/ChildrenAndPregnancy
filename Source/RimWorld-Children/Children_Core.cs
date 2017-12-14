@@ -15,7 +15,7 @@ namespace RimWorldChildren
 	{
 		public override string ModIdentifier {
 			get {
-				return "Children_and_Pregnancy";
+				return "Children_and_Pregnancy_testing";
 			}
 		}
 	}
@@ -32,6 +32,8 @@ namespace RimWorldChildren
 	public static class ChildrenUtility{
 
 		public static float ChildMaxWeaponMass(Pawn pawn){
+			if(pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager)
+				return 999;
 			const float baseMass = 2.5f;
 			return (pawn.skills.GetSkill (SkillDefOf.Shooting).Level * 0.1f) + baseMass;
 		}
@@ -62,6 +64,18 @@ namespace RimWorldChildren
 		{
 			return pawn.RaceProps.body.AllParts.Find (x => x.def == DefDatabase<BodyPartDef>.GetNamed(bodyPart, true));
 		}
+		
+		internal static List<ThingStuffPair> FilterChildWeapons(Pawn pawn, List<ThingStuffPair> weapons)
+		{
+			var weapons_out = new List<ThingStuffPair>();
+			if(weapons.Count > 0)
+				foreach(ThingStuffPair weapon in weapons){
+					if(weapon.thing.BaseMass < ChildMaxWeaponMass(pawn)){
+						weapons_out.Add(weapon);
+					}
+				}
+			return weapons_out;
+		}
 	}
 
 	[StaticConstructorOnStartup]
@@ -72,14 +86,14 @@ namespace RimWorldChildren
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
 			HarmonyInstance.DEBUG = false;
 
-			MethodInfo jobdriver_lovin_m92_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M92_Transpiler");
-			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__92", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m92_transpiler));
+			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
+			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
 
 			MethodInfo jobdriver_wear_transpiler = AccessTools.Method (typeof(Wear_Override), "JobDriver_Wear_MoveNext_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Wear).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, null, new HarmonyMethod (jobdriver_wear_transpiler));
-
+			
 			MethodInfo bed_floatoptions_movenext_transpiler = AccessTools.Method (typeof(BedHarmonyPatches), "GetFloatMenuOptions_Transpiler");
-			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator155", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
+			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
 		}
 	}
 
@@ -215,7 +229,33 @@ namespace RimWorldChildren
 		internal static void Notify_EquipmentAdded_Patch(ref ThingWithComps eq, ref Pawn_EquipmentTracker __instance){
 			Pawn pawn = __instance.ParentHolder as Pawn;
 			if (pawn != null && pawn.def.defName == "Human" && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
-				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}),MessageSound.Negative );
+				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}), MessageTypeDefOf.CautionInput);
+			}
+		}
+	}
+	
+	// Prevents children from being spawned with weapons too heavy for them
+	[HarmonyPatch(typeof(PawnWeaponGenerator), "TryGenerateWeaponFor")]
+	public static class PawnWeaponGenerator_TryGenerateWeaponFor_Patch
+	{
+		[HarmonyTranspiler]
+		static IEnumerable<CodeInstruction> TryGenerateWeaponFor_Transpiler(IEnumerable<CodeInstruction> instructions)
+		{
+			List<CodeInstruction> ILs = instructions.ToList ();
+
+			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Ldfld && IL.operand.ToStringSafe().Contains("Pawn_EquipmentTracker")) - 1;
+			
+			MethodInfo giveChildWeapons = typeof(ChildrenUtility).GetMethod("FilterChildWeapons", AccessTools.all);
+			var injection = new List<CodeInstruction> {
+				new CodeInstruction(OpCodes.Ldarg_0),
+				new CodeInstruction(OpCodes.Ldloc_2),
+				new CodeInstruction(OpCodes.Callvirt, giveChildWeapons),
+				new CodeInstruction(OpCodes.Stloc_2),
+			};
+			ILs.InsertRange (index, injection);
+
+			foreach (CodeInstruction instruction in ILs) {
+				yield return instruction;
 			}
 		}
 	}

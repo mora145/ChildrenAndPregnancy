@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 namespace RimWorldChildren
 {
+	// Child discipline is given from a social fight, so it doesn't use a workgiver
+	
 	public class JobDriver_DisciplineChild : JobDriver
 	{
 		//
@@ -21,6 +23,11 @@ namespace RimWorldChildren
 			get {
 				return (Pawn)TargetA.Thing;
 			}
+		}
+		
+		public override bool TryMakePreToilReservations()
+		{
+			return this.pawn.Reserve(this.Victim, this.job, 1, -1, null);
 		}
 
 		internal static BodyPartRecord GetRandomDisciplinePart(Pawn victim)

@@ -14,16 +14,17 @@ namespace RimWorldChildren
 
 	internal static class Lovin_Override
 	{
-		static IEnumerable<CodeInstruction> JobDriver_Lovin_M92_Transpiler(IEnumerable<CodeInstruction> instructions){
+		static IEnumerable<CodeInstruction> JobDriver_Lovin_M4_Transpiler(IEnumerable<CodeInstruction> instructions){
 			List<CodeInstruction> ILs = instructions.ToList ();
-			Type iterator = typeof(JobDriver_Lovin).GetNestedType ("<MakeNewToils>c__Iterator32", AccessTools.all);
+			Type iterator = typeof(JobDriver_Lovin).GetNestedType ("<MakeNewToils>c__Iterator0", AccessTools.all);
 			int injectIndex = ILs.FindIndex (IL => IL.opcode == OpCodes.Ret);
+			
 			List<CodeInstruction> injection = new List<CodeInstruction> {
 				new CodeInstruction(OpCodes.Ldarg_0),
-				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "<>f__this")),
+				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "$this")), //get JobDriver_Lovin object
 				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(JobDriver_Lovin), "pawn")),
 				new CodeInstruction(OpCodes.Ldarg_0),
-				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "<>f__this")),
+				new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(iterator, "$this")),
 				new CodeInstruction(OpCodes.Call, AccessTools.Property(typeof(JobDriver_Lovin), "Partner").GetGetMethod(true)),
 				new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Lovin_Override), "TryToImpregnate")),
 			};
@@ -38,6 +39,13 @@ namespace RimWorldChildren
             // Lesbian/gay couples. Those cases should never result in pregnancy
             if(initiator.gender == partner.gender)
                 return;
+            
+            // One of the two is sterile, so don't continue
+            foreach(Pawn pawn in new List<Pawn>{initiator,partner}){
+            	if(pawn.health.hediffSet.HasHediff(HediffDef.Named("Sterile"))){
+            		return;
+            	}
+            }
 
             Pawn male = initiator.gender == Gender.Male? initiator: partner;
 			Pawn female = initiator.gender == Gender.Female ? initiator : partner;

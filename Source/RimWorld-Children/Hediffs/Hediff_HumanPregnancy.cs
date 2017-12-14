@@ -97,7 +97,7 @@ namespace RimWorldChildren
 
 		public void DiscoverPregnancy (){
 			is_discovered = true;
-			Find.LetterStack.ReceiveLetter ("WordHumanPregnancy".Translate(), "MessageIsPregnant".Translate (new object[] { pawn.LabelIndefinite () }), LetterDefOf.Good, pawn, null);		 
+			Find.LetterStack.ReceiveLetter ("WordHumanPregnancy".Translate(), "MessageIsPregnant".Translate (new object[] { pawn.LabelIndefinite () }), LetterDefOf.PositiveEvent, pawn, null);		 
 		}
 
 		static List<TraitDef> genetic_traits = new List<TraitDef> {
@@ -230,8 +230,9 @@ namespace RimWorldChildren
 				//Log.Message ("Debug: Newborn is born to the " + last_name + " family.");
 			}
 
-			//PawnGenerationRequest request = new PawnGenerationRequest (mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, mother.Map, false, true, false, false, true, false, 1, false, true, true, null, 0, 0, null, skin_whiteness, last_name);
-			PawnGenerationRequest request = new PawnGenerationRequest (mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, mother.Map.Tile, false, true, false, false, false, false, 1, false, true, true, false, false, null, 0, 0, null, skin_whiteness, last_name);
+			//A16//PawnGenerationRequest request = new PawnGenerationRequest (mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, mother.Map, false, true, false, false, true, false, 1, false, true, true, null, 0, 0, null, skin_whiteness, last_name);
+			//A17//PawnGenerationRequest request = new PawnGenerationRequest (mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, mother.Map.Tile, false, true, false, false, false, false, 1, false, true, true, false, false, null, 0, 0, null, skin_whiteness, last_name);
+			PawnGenerationRequest request = new PawnGenerationRequest (mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, mother.Map.Tile, true, true, false, false, false, false, 0f, false, true, false, false, false, false, false, null, 0f, 0f, 0f, default(Gender?), skin_whiteness, last_name);
 
 			Pawn baby = null;
 			for (int i = 0; i < num; i++) {
@@ -334,7 +335,7 @@ namespace RimWorldChildren
 							Find.LetterStack.ReceiveLetter ("LabelGaveBirth".Translate (new object[] { baby.LabelIndefinite () }), "MessageHumanBirth".Translate (new object[] {
 								mother.LabelIndefinite (),
 								baby.Name.ToStringShort
-							}), LetterDefOf.Good, baby, null);
+							}), LetterDefOf.PositiveEvent, baby, null);
 						}
 
 						// Try to give PPD. If not, give "New baby" thought
@@ -520,7 +521,7 @@ namespace RimWorldChildren
 					if (this.Visible && PawnUtility.ShouldSendNotificationAbout (this.pawn)) {
 						Messages.Message ("MessageMiscarriedStarvation".Translate (new object[] {
 							this.pawn.LabelIndefinite ()
-						}).CapitalizeFirst (), this.pawn, MessageSound.Negative);
+						}).CapitalizeFirst (), this.pawn, MessageTypeDefOf.NegativeHealthEvent);
 					}
 					Miscarry (false);
 					return;
@@ -529,7 +530,7 @@ namespace RimWorldChildren
 					if (this.Visible && PawnUtility.ShouldSendNotificationAbout (this.pawn)) {
 						Messages.Message ("MessageMiscarriedPoorHealth".Translate (new object[] {
 							this.pawn.LabelIndefinite ()
-						}).CapitalizeFirst (), this.pawn, MessageSound.Negative);
+						}).CapitalizeFirst (), this.pawn, MessageTypeDefOf.NegativeHealthEvent);
 					}
 					Miscarry (false);
 					return;
@@ -558,7 +559,7 @@ namespace RimWorldChildren
 				if (!pawn.health.hediffSet.HasHediff (HediffDef.Named ("GivingBirth"))) {
 					// Notify the player birth is near
 					if (Visible && PawnUtility.ShouldSendNotificationAbout (pawn)) {
-						Messages.Message ("MessageHavingContractions".Translate (new object[] {	pawn.LabelIndefinite () }).CapitalizeFirst (), pawn, MessageSound.Standard);
+						Messages.Message ("MessageHavingContractions".Translate (new object[] {	pawn.LabelIndefinite () }).CapitalizeFirst (), pawn, MessageTypeDefOf.NeutralEvent);
 					}
 					// Give the mother the GivingBirth hediff
 					pawn.health.AddHediff (HediffDef.Named ("GivingBirth"), ChildrenUtility.GetPawnBodyPart (pawn, "Torso"), null);
