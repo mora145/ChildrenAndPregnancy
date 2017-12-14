@@ -36,5 +36,7 @@
   <GaveBirthFlag.label>出産経験済</GaveBirthFlag.label>
   <GaveBirthFlag.stages.0.label>妊娠兆候</GaveBirthFlag.stages.0.label>
 
+  <Sterile.label>不妊症</Sterile.label>
+
 
 </LanguageData>
