@@ -2,7 +2,6 @@
 using System;
 using Verse;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace RimWorldChildren
 {

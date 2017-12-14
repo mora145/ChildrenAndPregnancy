@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Jobs\Driver_FeedBaby.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recipes\Recipe_AddHediffToPart.cs" />
     <Compile Include="Tools\BackstoryDef.cs" />
     <Compile Include="Hediffs\Hediff_AbortionPill.cs" />
     <Compile Include="Hediffs\Hediff_Baby.cs" />

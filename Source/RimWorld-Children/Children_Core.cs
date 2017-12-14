@@ -84,7 +84,7 @@ namespace RimWorldChildren
 		static HarmonyPatches(){
 
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
-			HarmonyInstance.DEBUG = true;
+			HarmonyInstance.DEBUG = false;
 
 			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
