@@ -35,6 +35,9 @@ namespace RimWorldChildren
 			if (!pawn2.RaceProps.Humanlike || pawn2.ageTracker.CurLifeStageIndex > AgeStage.Toddler) {
 				return false;
 			}
+			if (!pawn2.InBed()){
+				return false;
+			}
 			if (pawn2.needs.joy == null || pawn2.needs.joy.CurLevelPercentage > 0.9f) {
 				return false;
 			}
