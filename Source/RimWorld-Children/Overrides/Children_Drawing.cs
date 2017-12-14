@@ -78,7 +78,7 @@ namespace RimWorldChildren
 				new CodeInstruction(OpCodes.Call, typeof(Children_Drawing).GetMethod("ModifyChildYPosOffset")),
 			};
 			ILs.InsertRange (injectIndex0, injection0);
-			foreach(int i in new List<int>{5,6,7, 11, 24}){
+			foreach(int i in new List<int>{5,6,7, 11, 30}){
 				ILs.InsertRange (ILs.FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand as LocalBuilder != null && ((LocalBuilder)x.operand).LocalIndex == i), injection0);
 			}
 
@@ -111,26 +111,26 @@ namespace RimWorldChildren
 			};
 			ILs.InsertRange (injectIndex2, injection2);
 			
-			//TODO: Fix the rendering injections
 			// Modify the scale of a hat graphic when worn by a child
-			int injectIndex3 = ILs.GetRange(injectIndex2, ILs.Count - injectIndex2).FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand is LocalBuilder && ((LocalBuilder)x.operand).LocalIndex == 16) + 1;
+			//int injectIndex3 = ILs.FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand is LocalBuilder && ((LocalBuilder)x.operand).LocalIndex == 18) + 1;
+			int injectIndex3 = ILs.FindIndex (x => x.opcode == OpCodes.Call && x.operand == typeof(GenDraw).GetMethod("DrawMeshNowOrLater", AccessTools.all)) + 4;
 			List<CodeInstruction> injection3 = new List<CodeInstruction> {
-				new CodeInstruction (OpCodes.Ldloc_S, 16),
+				new CodeInstruction (OpCodes.Ldloc_S, 18),
 				new CodeInstruction (OpCodes.Ldarg_0),
 				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
 				new CodeInstruction (OpCodes.Call, typeof(Children_Drawing).GetMethod("ModifyHatForChild")),
-				new CodeInstruction (OpCodes.Stloc_S, 16),
+				new CodeInstruction (OpCodes.Stloc_S, 18),
 			};
 			ILs.InsertRange (injectIndex3, injection3);
 
 			// Modify the scale of a hair graphic when drawn on a child
 			int injectIndex4 = ILs.FindIndex (x => x.opcode == OpCodes.Callvirt && x.operand == AccessTools.Method (typeof(PawnGraphicSet), "HairMatAt")) + 2;
 			List<CodeInstruction> injection4 = new List<CodeInstruction> {
-				new CodeInstruction (OpCodes.Ldloc_S, 18),
+				new CodeInstruction (OpCodes.Ldloc_S, 24),
 				new CodeInstruction (OpCodes.Ldarg_0),
 				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
 				new CodeInstruction (OpCodes.Call, AccessTools.Method(typeof(Children_Drawing), "ModifyHairForChild")),
-				new CodeInstruction (OpCodes.Stloc_S, 18),
+				new CodeInstruction (OpCodes.Stloc_S, 24),
 			};
 			ILs.InsertRange (injectIndex4, injection4);
 
