@@ -86,13 +86,13 @@
     <Compile Include="Jobs\Driver_PlayWithBaby.cs" />
     <Compile Include="Hediffs\Hediff_UnhappyBaby.cs" />
     <Compile Include="Thoughts\ThoughtWorker_CryingBaby.cs" />
-    <Compile Include="Overrides\Thought_Overrides.cs" />
-    <Compile Include="Overrides\Children_Drawing.cs" />
+    <Compile Include="Overrides\Thoughts.cs" />
+    <Compile Include="Overrides\PawnRendering.cs" />
     <Compile Include="Children_Core.cs" />
-    <Compile Include="Overrides\Bed_Override.cs" />
+    <Compile Include="Overrides\Bed.cs" />
     <Compile Include="Jobs\Driver_BreastfeedBaby.cs" />
-    <Compile Include="Overrides\Wear_Override.cs" />
-    <Compile Include="Overrides\Lovin_Override.cs" />
+    <Compile Include="Overrides\Wear.cs" />
+    <Compile Include="Overrides\Lovin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
@@ -100,6 +100,5 @@
     <None Include="DetourInjector.cs" />
     <None Include="Tools\FieldAccessor.cs" />
     <None Include="Tools\Detours.cs" />
-    <None Include="Overrides\Children_DrawingOld.cs" />
   </ItemGroup>
 </Project>
