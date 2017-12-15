@@ -91,14 +91,12 @@
     <Compile Include="Overrides\PawnRendering.cs" />
     <Compile Include="Children_Core.cs" />
     <Compile Include="Overrides\Bed.cs" />
-    <Compile Include="Jobs\Driver_BreastfeedBaby.cs" />
     <Compile Include="Overrides\Wear.cs" />
     <Compile Include="Overrides\Lovin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
-    <None Include="DetourInjector.cs" />
     <None Include="Tools\FieldAccessor.cs" />
     <None Include="Tools\Detours.cs" />
   </ItemGroup>

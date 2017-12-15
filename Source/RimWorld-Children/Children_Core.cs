@@ -40,7 +40,7 @@ namespace RimWorldChildren
 
 		public static bool CanBreastfeed(Pawn pawn)
 		{
-			if (pawn.gender != Gender.Female &&
+			if (pawn.gender == Gender.Female &&
 				pawn.ageTracker.CurLifeStage.reproductive &&
 				pawn.ageTracker.AgeBiologicalYears < 50 &&
 				pawn.health.hediffSet.HasHediff (HediffDef.Named ("Lactating")))

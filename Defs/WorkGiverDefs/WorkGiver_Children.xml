@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  
-  <WorkGiverDef>
-	<defName>DoBreastfeedBaby</defName>
-	<label>breastfeed baby</label>
-	<giverClass>RimWorldChildren.WorkGiver_BreastfeedBaby</giverClass>
-	<workType>Childcare</workType>
-	<verb>breastfeed baby</verb>
-	<gerund>breastfeeding baby</gerund>
-	<priorityInType>75</priorityInType>
-	<requiredCapacities>
-	  <li>Manipulation</li>
-	</requiredCapacities>
-  </WorkGiverDef>
-	
+  	
   <WorkGiverDef>
 	<defName>FeedBaby</defName>
 	<label>feed baby</label>
@@ -21,7 +8,7 @@
 	<workType>Childcare</workType>
 	<verb>feed baby</verb>
 	<gerund>feeding baby</gerund>
-	<priorityInType>65</priorityInType>
+	<priorityInType>75</priorityInType>
 	<requiredCapacities>
 	  <li>Manipulation</li>
 	</requiredCapacities>

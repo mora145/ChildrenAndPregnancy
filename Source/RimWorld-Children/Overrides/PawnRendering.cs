@@ -77,11 +77,13 @@ namespace RimWorldChildren
 				new CodeInstruction(OpCodes.Ldarg_S, 7), //portrait
 				new CodeInstruction(OpCodes.Call, typeof(Children_Drawing).GetMethod("ModifyChildYPosOffset")),
 			};
+			// We actually have to change this is a lot of places, so we repeat the injection
 			ILs.InsertRange (injectIndex0, injection0);
 			foreach(int i in new List<int>{5,6,7, 11, 30}){
 				ILs.InsertRange (ILs.FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand as LocalBuilder != null && ((LocalBuilder)x.operand).LocalIndex == i), injection0);
 			}
 
+			// Skip past the head drawing code if the pawn is a human toddler or younger
 			int injectIndex1 = ILs.FindIndex (x => x.opcode == OpCodes.Ldarg_3);
 			Label babyDrawBodyJump = ILgen.DefineLabel ();
 			ILs [injectIndex1 + 2].labels = new List<Label>{ babyDrawBodyJump };
@@ -239,15 +241,18 @@ namespace RimWorldChildren
 		public static Vector3 ModifyChildYPosOffset(Vector3 pos, Pawn pawn, bool portrait){
 			Vector3 newPos = pos;
 			if (pawn.RaceProps != null && pawn.RaceProps.Humanlike) {
-				if (pawn.ageTracker.CurLifeStageIndex == AgeStage.Child) {
+				// move the draw target down to compensate for child shortness
+				if (pawn.ageTracker.CurLifeStageIndex == AgeStage.Child && !pawn.InBed()) {
 					newPos.z -= 0.15f;
 				}
-				if (pawn.InBed () && !portrait) {
+				if (pawn.InBed () && !portrait && pawn.CurrentBed().def.size.z == 1) {
 					Building_Bed bed = pawn.CurrentBed ();
+					// Babies and toddlers get drawn further down along the bed
 					if (pawn.ageTracker.CurLifeStageIndex < AgeStage.Child) {
 						Vector3 vector = new Vector3 (0, 0, 0.5f).RotatedBy (bed.Rotation.AsAngle);
 						newPos -= vector;
-					} else if (pawn.ageTracker.CurLifeStageIndex == AgeStage.Child && bed.def.size.z == 1) { // Are we in a crib?
+					// ... as do children, but to a lesser extent
+					} else if (pawn.ageTracker.CurLifeStageIndex == AgeStage.Child) { // Are we in a crib?
 						Vector3 vector = new Vector3 (0, 0, 0.2f).RotatedBy (bed.Rotation.AsAngle);
 						newPos -= vector;
 					}
