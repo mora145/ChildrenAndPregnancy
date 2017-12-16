@@ -49,6 +49,14 @@ namespace RimWorldChildren
 				return false;
 		}
 
+		internal static BodyPartRecord GetPawnBodyPart(Pawn pawn, String bodyPart)
+		{
+			return pawn.RaceProps.body.AllParts.Find (x => x.def == DefDatabase<BodyPartDef>.GetNamed(bodyPart, true));
+		}
+	}
+	
+	internal static class TranspilerHelper{
+		
 		public static T FailOnBaby<T>(this T f) where T : IJobEndable{
 			f.AddEndCondition (delegate {
 				//				return JobCondition.Incompletable;
@@ -59,22 +67,23 @@ namespace RimWorldChildren
 			});
 			return f;
 		}
-
-		internal static BodyPartRecord GetPawnBodyPart(Pawn pawn, String bodyPart)
-		{
-			return pawn.RaceProps.body.AllParts.Find (x => x.def == DefDatabase<BodyPartDef>.GetNamed(bodyPart, true));
-		}
 		
 		internal static List<ThingStuffPair> FilterChildWeapons(Pawn pawn, List<ThingStuffPair> weapons)
 		{
 			var weapons_out = new List<ThingStuffPair>();
 			if(weapons.Count > 0)
 				foreach(ThingStuffPair weapon in weapons){
-					if(weapon.thing.BaseMass < ChildMaxWeaponMass(pawn)){
+					if(weapon.thing.BaseMass < ChildrenUtility.ChildMaxWeaponMass(pawn)){
 						weapons_out.Add(weapon);
 					}
 				}
 			return weapons_out;
+		}
+		
+		internal static bool RecipeHasNoIngredients(RecipeDef recipe){
+			if(recipe.ingredients.Count == 0)
+				return true;
+			return false;
 		}
 	}
 
@@ -84,7 +93,7 @@ namespace RimWorldChildren
 		static HarmonyPatches(){
 
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
-			HarmonyInstance.DEBUG = false;
+			HarmonyInstance.DEBUG = true;
 
 			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
@@ -245,12 +254,38 @@ namespace RimWorldChildren
 
 			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Ldfld && IL.operand.ToStringSafe().Contains("Pawn_EquipmentTracker")) - 1;
 			
-			MethodInfo giveChildWeapons = typeof(ChildrenUtility).GetMethod("FilterChildWeapons", AccessTools.all);
+			MethodInfo giveChildWeapons = typeof(TranspilerHelper).GetMethod("FilterChildWeapons", AccessTools.all);
 			var injection = new List<CodeInstruction> {
 				new CodeInstruction(OpCodes.Ldarg_0),
 				new CodeInstruction(OpCodes.Ldloc_2),
 				new CodeInstruction(OpCodes.Callvirt, giveChildWeapons),
 				new CodeInstruction(OpCodes.Stloc_2),
+			};
+			ILs.InsertRange (index, injection);
+
+			foreach (CodeInstruction instruction in ILs) {
+				yield return instruction;
+			}
+		}
+	}
+	
+	//Fixes null reference exception error if a Bill_Medical has no actual ingredients
+	[HarmonyPatch(typeof(Bill_Medical), "Notify_DoBillStarted")]
+	public static class Bill_Medical_NotifyDoBillStarted_Patch
+	{
+		[HarmonyTranspiler]
+		static IEnumerable<CodeInstruction> Notify_DoBillStarted_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilgen)
+		{
+			List<CodeInstruction> ILs = instructions.ToList ();
+			Label jumpToEnd = ILs[ILs.FindIndex(x => x.opcode == OpCodes.Ret)].labels[0];
+			// Add the "jumpToEnd" label onto the last instruction
+			
+			int index = ILs.FindIndex (IL => IL.opcode == OpCodes.Brtrue) + 1;
+			var injection = new List<CodeInstruction> {
+				new CodeInstruction(OpCodes.Ldarg_0),
+				new CodeInstruction(OpCodes.Ldfld, typeof(Bill_Medical).GetField("recipe", AccessTools.all)),
+				new CodeInstruction(OpCodes.Call, typeof(TranspilerHelper).GetMethod("RecipeHasNoIngredients", AccessTools.all)),
+				new CodeInstruction(OpCodes.Brtrue, jumpToEnd),
 			};
 			ILs.InsertRange (index, injection);
 

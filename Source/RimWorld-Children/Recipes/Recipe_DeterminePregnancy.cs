@@ -14,6 +14,16 @@ namespace RimWorldChildren
 		//
 		// Methods
 		//
+		
+		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
+		{
+			BodyPartRecord part = pawn.RaceProps.body.corePart;
+			if(recipe.appliedOnFixedBodyParts[0] != null)
+				part = pawn.RaceProps.body.AllParts.Find(x => x.def == recipe.appliedOnFixedBodyParts[0]);
+			if(part != null && pawn.gender == Gender.Female && pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager){
+				yield return part;
+			}
+		}
 
 		public override void ApplyOnPawn (Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
@@ -24,6 +34,10 @@ namespace RimWorldChildren
 			else{
 				Messages.Message (billDoer.NameStringShort + " has determined " + pawn.NameStringShort + " is not pregnant.", MessageTypeDefOf.NeutralEvent);
 			}
+		}
+		
+		public override void ConsumeIngredient(Thing ingredient, RecipeDef recipe, Map map)
+		{
 		}
 	}
 }

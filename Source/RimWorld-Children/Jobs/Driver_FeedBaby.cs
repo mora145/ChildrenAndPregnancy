@@ -63,7 +63,7 @@ namespace RimWorldChildren
 			Pawn pawn2 = (Pawn)t;
 			if (pawn2 != null){
 				if(ChildrenUtility.CanBreastfeed(pawn)){
-					Log.Message("Deciding to breastfeed baby.");
+					//Log.Message("Deciding to breastfeed baby.");
 					return new Job (DefDatabase<JobDef>.GetNamed ("BreastfeedBaby")) {
 						targetA = pawn2,
 					};
@@ -73,7 +73,7 @@ namespace RimWorldChildren
 					ThingDef def1;
 					if (FoodUtility.TryFindBestFoodSourceFor(pawn, pawn2, pawn2.needs.food.CurCategory == HungerCategory.UrgentlyHungry, out t2, out def1, false, true, false, false, false))
 					{
-						Log.Message("Deciding to feed normal food to baby.");
+						//Log.Message("Deciding to feed normal food to baby.");
 						return new Job(JobDefOf.FeedPatient)
 						{
 							targetA = t2,

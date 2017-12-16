@@ -16,7 +16,7 @@ namespace RimWorldChildren
 		{
 			List<CodeInstruction> ILs = instructions.ToList ();
 
-			MethodInfo failOnBaby = typeof(ChildrenUtility).GetMethod ("FailOnBaby", AccessTools.all).MakeGenericMethod (typeof(JobDriver_Wear));
+			MethodInfo failOnBaby = typeof(TranspilerHelper).GetMethod ("FailOnBaby", AccessTools.all).MakeGenericMethod (typeof(JobDriver_Wear));
 
 			int index = ILs.FindIndex (x => x.labels.Count > 0);
 

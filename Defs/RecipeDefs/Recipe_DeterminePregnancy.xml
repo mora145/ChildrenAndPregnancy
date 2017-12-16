@@ -5,8 +5,6 @@
   <RecipeDef>
     <defName>DeterminePregnancy</defName>
     <label>determine pregnancy</label>
-    <effectWorking>Surgery</effectWorking>
-    <soundWorking>Recipe_Surgery</soundWorking>
     <workSpeedStat>MedicalOperationSpeed</workSpeedStat>
     <workSkill>Medicine</workSkill>
     <workSkillLearnFactor>10</workSkillLearnFactor>
@@ -15,9 +13,13 @@
     <jobString>Determining if colonist is pregnant.</jobString>
     <workAmount>800</workAmount>
     <hideBodyPartNames>true</hideBodyPartNames>
+  	<anesthetize>false</anesthetize>
     <recipeUsers>
       <li>Human</li>
     </recipeUsers>
+  	<appliedOnFixedBodyParts>
+		<li>Torso</li>
+	</appliedOnFixedBodyParts>
     <skillRequirements>
 		<Medicine>5</Medicine>
     </skillRequirements>
