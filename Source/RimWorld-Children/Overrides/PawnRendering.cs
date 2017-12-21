@@ -160,7 +160,7 @@ namespace RimWorldChildren
 			LongEventHandler.ExecuteWhenFinished (delegate {
 
 				//if (!graphics.pawn.RaceProps.Humanlike) {
-				if (ChildrenUtility.RaceUsesChildren(graphics.pawn)) {
+				if (!ChildrenUtility.RaceUsesChildren(graphics.pawn)) {
 					return;
 				}
 
