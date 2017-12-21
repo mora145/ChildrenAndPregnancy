@@ -20,7 +20,8 @@ namespace RimWorldChildren
 			BodyPartRecord part = pawn.RaceProps.body.corePart;
 			if(recipe.appliedOnFixedBodyParts[0] != null)
 				part = pawn.RaceProps.body.AllParts.Find(x => x.def == recipe.appliedOnFixedBodyParts[0]);
-			if(part != null && pawn.gender == Gender.Female && pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager){
+			if(part != null && ChildrenUtility.RaceUsesChildren(pawn) && pawn.gender == Gender.Female &&
+			   pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager){
 				yield return part;
 			}
 		}

@@ -103,7 +103,7 @@ namespace RimWorldChildren
 			List<CodeInstruction> injection2 = new List<CodeInstruction> {
 				new CodeInstruction (OpCodes.Ldarg_0),
 				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
-				new CodeInstruction (OpCodes.Call, typeof(Children_Drawing).GetMethod("EnsurePawnIsHuman")),
+				new CodeInstruction (OpCodes.Call, typeof(ChildrenUtility).GetMethod("RaceUsesChildren")),
 				new CodeInstruction (OpCodes.Brfalse, notHumanJump),
 				new CodeInstruction (OpCodes.Ldarg_0),
 				new CodeInstruction (OpCodes.Ldfld, typeof(PawnRenderer).GetField("pawn", AccessTools.all)),
@@ -160,7 +160,7 @@ namespace RimWorldChildren
 			LongEventHandler.ExecuteWhenFinished (delegate {
 
 				//if (!graphics.pawn.RaceProps.Humanlike) {
-				if (graphics.pawn.def.defName != "Human") {
+				if (ChildrenUtility.RaceUsesChildren(graphics.pawn)) {
 					return;
 				}
 
@@ -273,11 +273,6 @@ namespace RimWorldChildren
 		}
 		public static bool EnsurePawnIsChildOrOlder(Pawn pawn){
 			if(pawn.ageTracker.CurLifeStageIndex >= AgeStage.Child)
-				return true;
-			return false;
-		}
-		public static bool EnsurePawnIsHuman(Pawn pawn){
-			if(pawn.def.defName == "Human")
 				return true;
 			return false;
 		}

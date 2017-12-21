@@ -13,7 +13,7 @@ namespace RimWorldChildren
 		internal static void CanGetThought_Patch(ref Pawn pawn, ref ThoughtDef def, ref bool __result)
 		{
 			// Toddlers and younger can't get these thoughts
-			if (pawn.ageTracker.CurLifeStageIndex <= 1) {
+			if (pawn.ageTracker.CurLifeStageIndex <= 1 && ChildrenUtility.RaceUsesChildren(pawn)) {
 				List<ThoughtDef> thoughtlist = new List<ThoughtDef>{
 					ThoughtDefOf.AteWithoutTable,
 					ThoughtDefOf.KnowPrisonerDiedInnocent,

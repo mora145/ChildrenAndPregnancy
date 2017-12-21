@@ -96,8 +96,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
-  <ItemGroup>
-    <None Include="Tools\FieldAccessor.cs" />
-    <None Include="Tools\Detours.cs" />
-  </ItemGroup>
 </Project>

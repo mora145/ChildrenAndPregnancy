@@ -51,7 +51,7 @@ namespace RimWorldChildren
 			Pawn female = initiator.gender == Gender.Female ? initiator : partner;
 
 			// Only humans can be impregnated for now
-			if (female.def.defName != "Human")
+			if (!ChildrenUtility.RaceUsesChildren(female))
 				return;
 
 			BodyPartRecord torso = female.RaceProps.body.AllParts.Find (x => x.def == BodyPartDefOf.Torso);

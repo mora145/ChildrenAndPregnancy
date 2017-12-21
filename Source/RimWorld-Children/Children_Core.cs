@@ -19,6 +19,26 @@ namespace RimWorldChildren
 			}
 		}
 	}
+	
+	[StaticConstructorOnStartup]
+	internal static class HarmonyPatches{
+
+		static HarmonyPatches(){
+
+			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
+			HarmonyInstance.DEBUG = true;
+
+			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
+			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
+
+			MethodInfo jobdriver_wear_transpiler = AccessTools.Method (typeof(Wear_Override), "JobDriver_Wear_MoveNext_Transpiler");
+			harmonyInstance.Patch (typeof(JobDriver_Wear).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, null, new HarmonyMethod (jobdriver_wear_transpiler));
+			
+			//Fixed in B18 so this is redundant
+			//MethodInfo bed_floatoptions_movenext_transpiler = AccessTools.Method (typeof(BedHarmonyPatches), "GetFloatMenuOptions_Transpiler");
+			//harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
+		}
+	}
 
 	public static class AgeStage
 	{
@@ -48,6 +68,13 @@ namespace RimWorldChildren
 			else
 				return false;
 		}
+		
+		public static bool RaceUsesChildren(Pawn pawn){
+			// This will eventually be changed to allow alien races to have children
+			if(pawn.def.defName == "Human")
+				return true;
+			return false;
+		}
 
 		internal static BodyPartRecord GetPawnBodyPart(Pawn pawn, String bodyPart)
 		{
@@ -60,7 +87,7 @@ namespace RimWorldChildren
 		public static T FailOnBaby<T>(this T f) where T : IJobEndable{
 			f.AddEndCondition (delegate {
 				//				return JobCondition.Incompletable;
-				if(f.GetActor().ageTracker.CurLifeStageIndex <= 1)
+				if(f.GetActor().ageTracker.CurLifeStageIndex <= 1 && ChildrenUtility.RaceUsesChildren(f.GetActor()))
 					return JobCondition.Incompletable;
 				else
 					return JobCondition.Ongoing;
@@ -84,25 +111,6 @@ namespace RimWorldChildren
 			if(recipe.ingredients.Count == 0)
 				return true;
 			return false;
-		}
-	}
-
-	[StaticConstructorOnStartup]
-	internal static class HarmonyPatches{
-
-		static HarmonyPatches(){
-
-			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
-			HarmonyInstance.DEBUG = true;
-
-			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
-			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
-
-			MethodInfo jobdriver_wear_transpiler = AccessTools.Method (typeof(Wear_Override), "JobDriver_Wear_MoveNext_Transpiler");
-			harmonyInstance.Patch (typeof(JobDriver_Wear).GetNestedTypes (AccessTools.all) [0].GetMethod ("MoveNext"), null, null, new HarmonyMethod (jobdriver_wear_transpiler));
-			
-			MethodInfo bed_floatoptions_movenext_transpiler = AccessTools.Method (typeof(BedHarmonyPatches), "GetFloatMenuOptions_Transpiler");
-			harmonyInstance.Patch (typeof(Building_Bed).GetNestedType("<GetFloatMenuOptions>c__Iterator2", AccessTools.all).GetMethod ("MoveNext"), null, null, new HarmonyMethod (bed_floatoptions_movenext_transpiler));
 		}
 	}
 
@@ -145,7 +153,8 @@ namespace RimWorldChildren
 			}
 		}
 	}
-		
+	
+	// Children are downed easier
 	[HarmonyPatch(typeof(Pawn_HealthTracker), "ShouldBeDowned")]
 	public static class Pawn_HealtherTracker_ShouldBeDowned_Patch
 	{
@@ -180,23 +189,24 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Babies wake up if they're unhappy
 	[HarmonyPatch(typeof(RestUtility), "WakeThreshold")]
 	public static class RestUtility_WakeThreshold_Patch{
 		[HarmonyPostfix]
 		internal static void WakeThreshold_Patch(ref float __result, ref Pawn p){
 			if (p.ageTracker.CurLifeStageIndex < AgeStage.Child && p.health.hediffSet.HasHediff (HediffDef.Named ("UnhappyBaby"))) {
-				// Babies wake up if they're unhappy
 				__result = 0.15f;
 			}
 		}
 	}
 
+	// Causes children to drop too-heavy weapons and potentially hurt themselves on firing
 	[HarmonyPatch(typeof(Verb_Shoot), "TryCastShot")]
 	public static class VerbShoot_TryCastShot_Patch{
 		[HarmonyPostfix]
 		internal static void TryCastShot_Patch(ref Verb_Shoot __instance){
 			Pawn pawn = __instance.CasterPawn;
-			if (pawn != null && pawn.def.defName == "Human" && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child) {
+			if (pawn != null && ChildrenUtility.RaceUsesChildren(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child) {
 				// The weapon is too heavy and the child will (likely) drop it when trying to fire
 				if (__instance.ownerEquipment.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn)) {
 
@@ -237,7 +247,7 @@ namespace RimWorldChildren
 		[HarmonyPostfix]
 		internal static void Notify_EquipmentAdded_Patch(ref ThingWithComps eq, ref Pawn_EquipmentTracker __instance){
 			Pawn pawn = __instance.ParentHolder as Pawn;
-			if (pawn != null && pawn.def.defName == "Human" && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
+			if (pawn != null && ChildrenUtility.RaceUsesChildren(pawn) && eq.def.BaseMass > ChildrenUtility.ChildMaxWeaponMass(pawn) && pawn.ageTracker.CurLifeStageIndex <= AgeStage.Child && pawn.Faction.IsPlayer) {
 				Messages.Message("MessageWeaponTooLarge".Translate(new object[]{eq.def.label, ((Pawn)__instance.ParentHolder).NameStringShort}), MessageTypeDefOf.CautionInput);
 			}
 		}
@@ -270,6 +280,7 @@ namespace RimWorldChildren
 	}
 	
 	//Fixes null reference exception error if a Bill_Medical has no actual ingredients
+	// Remove this code when it is fixed in Vanilla
 	[HarmonyPatch(typeof(Bill_Medical), "Notify_DoBillStarted")]
 	public static class Bill_Medical_NotifyDoBillStarted_Patch
 	{

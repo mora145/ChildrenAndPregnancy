@@ -29,18 +29,18 @@ namespace RimWorldChildren
 		//
 		protected override ThoughtState CurrentStateInternal (Pawn p)
 		{
-			if (p.ageTracker.CurLifeStageIndex > AgeStage.Toddler)
+			if (p.ageTracker.CurLifeStageIndex > AgeStage.Toddler || !ChildrenUtility.RaceUsesChildren(p))
 				return false;
 			Pawn mother = p.relations.GetFirstDirectRelationPawn (PawnRelationDefOf.Parent, x => x.gender == Gender.Female);
 			Pawn father = p.relations.GetFirstDirectRelationPawn (PawnRelationDefOf.Parent, x => x.gender == Gender.Male);
-			if (ArePawnsInSameRoom(p, mother) && ArePawnsInSameRoom(p, father)){
+			if (ArePawnsNear(p, mother) && ArePawnsNear(p, father)){
                 return ThoughtState.ActiveAtStage(2);
             }
-            else if(ArePawnsInSameRoom(p, mother))
+            else if(ArePawnsNear(p, mother))
             {
                 return ThoughtState.ActiveAtStage(0);
             }
-            else if(ArePawnsInSameRoom(p, father))
+            else if(ArePawnsNear(p, father))
             {
                 return ThoughtState.ActiveAtStage(1);
             }
@@ -50,7 +50,7 @@ namespace RimWorldChildren
             }
 		}
 
-        protected bool ArePawnsInSameRoom(Pawn a, Pawn b)
+        protected bool ArePawnsNear(Pawn a, Pawn b)
         {
             if (a == null || b == null) return false;
 

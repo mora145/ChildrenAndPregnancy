@@ -1,7 +1,6 @@
 ﻿using System;
 using RimWorld;
 using Verse;
-using System.Collections.Generic;
 
 namespace RimWorldChildren
 {
@@ -19,7 +18,7 @@ namespace RimWorldChildren
 			// Find all crying babies in the vicinity
 			int cryingBabies = 0;
 			foreach (Pawn mapPawn in p.MapHeld.mapPawns.AllPawnsSpawned) {
-				if (mapPawn.RaceProps.Humanlike &&
+				if (ChildrenUtility.RaceUsesChildren(mapPawn) &&
 				   mapPawn.ageTracker.CurLifeStageIndex == 0 &&
 				   mapPawn.health.hediffSet.HasHediff (HediffDef.Named ("UnhappyBaby")) &&
 					mapPawn.PositionHeld.InHorDistOf(p.PositionHeld, 24) &&

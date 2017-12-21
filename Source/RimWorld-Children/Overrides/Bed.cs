@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace RimWorldChildren
 {
+	// This makes it so only children are possible candidates to sleep in a crib-style bed (1x1)
 	[HarmonyPatch(typeof(Building_Bed))]
 	[HarmonyPatch("AssigningCandidates", PropertyMethod.Getter)]
 	public static class BedCandidateOverride
@@ -26,6 +27,7 @@ namespace RimWorldChildren
 			}
 		}
 	}
+	// This patches the FindBedFor method to ensure adult pawns don't find cribs to sleep in
 	[HarmonyPatch(typeof(RestUtility), "FindBedFor", new []{typeof(Pawn), typeof(Pawn), typeof(bool),typeof(bool),typeof(bool)})]
 	public static class FindBedForOverride
 	{
@@ -57,6 +59,8 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Fixes vanilla A17 bug; gone in B18
+	// This is just dummy code as it's no longer injected
 	internal static class BedHarmonyPatches{
 		internal static IEnumerable<CodeInstruction> GetFloatMenuOptions_Transpiler(IEnumerable<CodeInstruction> instructions){
 			var ILs = instructions.ToList ();
@@ -81,7 +85,7 @@ namespace RimWorldChildren
 	{
 		public static IEnumerable<Pawn> BedCandidates(Building_Bed bed){
 			if (bed.def.defName.Contains("Crib") ){
-				IEnumerable<Pawn> candidates = bed.Map.mapPawns.FreeColonists.Where (x => x.ageTracker.CurLifeStageIndex <= 2 && x.Faction == Faction.OfPlayer);
+				IEnumerable<Pawn> candidates = bed.Map.mapPawns.FreeColonists.Where (x => x.ageTracker.CurLifeStageIndex <= 2 && x.Faction == Faction.OfPlayer && ChildrenUtility.RaceUsesChildren(x));
 				return candidates;
 			}
 			else
