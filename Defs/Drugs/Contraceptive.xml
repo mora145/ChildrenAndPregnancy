@@ -3,7 +3,7 @@
     <ThingDef ParentName="MakeableDrugPillBase">
     <defName>Contraceptive</defName>
     <label>contraceptive</label>
-    <description>An easily produced gender arbitrary contraceptive that reliably suppresses unwanted pregnancies for one season.</description>
+    <description>An easily produced gender arbitrary contraceptive that reliably suppresses unwanted pregnancies for one quadrum.</description>
     <graphicData>
       <texPath>Things/Item/Contraceptive</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
