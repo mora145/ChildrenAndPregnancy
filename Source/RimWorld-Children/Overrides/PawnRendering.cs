@@ -77,7 +77,7 @@ namespace RimWorldChildren
 				new CodeInstruction(OpCodes.Ldarg_S, 7), //portrait
 				new CodeInstruction(OpCodes.Call, typeof(Children_Drawing).GetMethod("ModifyChildYPosOffset")),
 			};
-			// We actually have to change this is a lot of places, so we repeat the injection
+			// We actually have to change this in a lot of places, so we repeat the same injection
 			ILs.InsertRange (injectIndex0, injection0);
 			foreach(int i in new List<int>{5,6,7, 11, 30}){
 				ILs.InsertRange (ILs.FindIndex (x => x.opcode == OpCodes.Stloc_S && x.operand as LocalBuilder != null && ((LocalBuilder)x.operand).LocalIndex == i), injection0);

@@ -32,7 +32,7 @@ namespace RimWorldChildren
 			if (pawn2 == null || pawn2 == pawn) {
 				return false;
 			}
-			if (!pawn2.RaceProps.Humanlike) {
+			if (!pawn2.RaceProps.Humanlike || pawn2.ageTracker.CurLifeStageIndex > AgeStage.Toddler) {
 				return false;
 			}
 			if (pawn2.needs.food == null || pawn2.needs.food.CurLevelPercentage > pawn2.needs.food.PercentageThreshHungry + 0.02) {
@@ -57,7 +57,7 @@ namespace RimWorldChildren
 			return true;
 		}
 		
-		// We just use the FeedPatient Job from the medical branch
+		// We just use the FeedPatient Job from the medical branch for non-breastfeeding
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = (Pawn)t;

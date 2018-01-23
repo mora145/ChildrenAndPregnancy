@@ -12,7 +12,7 @@ namespace RimWorldChildren
 		protected override ThoughtState CurrentStateInternal (Pawn p)
 		{
 			// Make sure it only gets applied to kids
-			if (p.ageTracker.CurLifeStageIndex < 1 || p.ageTracker.CurLifeStageIndex > 2)
+			if (p.ageTracker.CurLifeStageIndex != AgeStage.Child)
 				return false;
 			// Psychopath kids doesn't afraid of anything
 			if (p.story.traits.HasTrait (TraitDefOf.Psychopath))

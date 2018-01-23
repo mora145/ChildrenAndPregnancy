@@ -8,6 +8,7 @@ using System.Collections;
 
 namespace RimWorldChildren
 {
+	// >implying any of this actually works
 	public class JobGiver_HugFriend : ThinkNode_JobGiver
 	{
 		//

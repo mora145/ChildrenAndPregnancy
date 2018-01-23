@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace RimWorldChildren
 {
+	// Prevents babies from wearing normal clothes
+	// Needs to be expanded upon when toddler clothing is added
 	internal static class Wear_Override
 	{
 		internal static IEnumerable<CodeInstruction> JobDriver_Wear_MoveNext_Transpiler(IEnumerable<CodeInstruction> instructions)

@@ -468,10 +468,7 @@ namespace RimWorldChildren
 
 		public bool IsLateTerm()
 		{
-			if (GestationProgress > 0.75f) {
-				return true;
-			}
-			return false;
+			return GestationProgress > 0.75f;
 		}
 
 		public void Miscarry (bool aborted)

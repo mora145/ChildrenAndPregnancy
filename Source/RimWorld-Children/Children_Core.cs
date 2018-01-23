@@ -26,7 +26,7 @@ namespace RimWorldChildren
 		static HarmonyPatches(){
 
 			HarmonyInstance harmonyInstance = HarmonyInstance.Create ("rimworld.thirite.children_and_pregnancy");
-			HarmonyInstance.DEBUG = true;
+			HarmonyInstance.DEBUG = false;
 
 			MethodInfo jobdriver_lovin_m4_transpiler = AccessTools.Method (typeof(Lovin_Override), "JobDriver_Lovin_M4_Transpiler");
 			harmonyInstance.Patch (typeof(JobDriver_Lovin).GetNestedTypes (AccessTools.all) [0].GetMethod ("<>m__4", AccessTools.all), null, null, new HarmonyMethod (jobdriver_lovin_m4_transpiler));
@@ -40,6 +40,7 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Handy for more readable code when age-checking
 	public static class AgeStage
 	{
 		public const int Baby = 0;
@@ -50,14 +51,14 @@ namespace RimWorldChildren
 	}
 
 	public static class ChildrenUtility{
-
+		// Returns the maximum possible mass of a weapon the specified child can use
 		public static float ChildMaxWeaponMass(Pawn pawn){
 			if(pawn.ageTracker.CurLifeStageIndex >= AgeStage.Teenager)
 				return 999;
 			const float baseMass = 2.5f;
 			return (pawn.skills.GetSkill (SkillDefOf.Shooting).Level * 0.1f) + baseMass;
 		}
-
+		// Determines if a pawn is capable of currently breastfeeding
 		public static bool CanBreastfeed(Pawn pawn)
 		{
 			if (pawn.gender == Gender.Female &&
@@ -69,13 +70,15 @@ namespace RimWorldChildren
 				return false;
 		}
 		
+		// Returns whether a race can become pregnant/have kids etc.
 		public static bool RaceUsesChildren(Pawn pawn){
 			// This will eventually be changed to allow alien races to have children
 			if(pawn.def.defName == "Human")
 				return true;
 			return false;
 		}
-
+		
+		// Quick method to simply return a body part instance by a given part name
 		internal static BodyPartRecord GetPawnBodyPart(Pawn pawn, String bodyPart)
 		{
 			return pawn.RaceProps.body.AllParts.Find (x => x.def == DefDatabase<BodyPartDef>.GetNamed(bodyPart, true));
@@ -114,6 +117,7 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Patches pawn generation to account for the possibility of children
 	[HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new []{typeof(PawnGenerationRequest)})]
 	public static class PawnGenerate_Patch
 	{
@@ -141,13 +145,13 @@ namespace RimWorldChildren
 			}
 		}
 	}
-
+	
+	// Disables babies and lower from trying to put on clothing
 	[HarmonyPatch(typeof(JobGiver_OptimizeApparel), "TryGiveJob")]
 	public static class JobGiver_OptimizeApparel_TryGiveJob_Patch{
 		[HarmonyPostfix]
 		internal static void TryGiveJob_Patch(ref Job __result, ref Pawn pawn){
-			// Pawn is a toddler or baby
-			if (pawn.ageTracker.CurLifeStageIndex <= 1) {
+			if (pawn.ageTracker.CurLifeStageIndex <= AgeStage.Baby) {
 				__result = null;
 
 			}
@@ -168,6 +172,7 @@ namespace RimWorldChildren
 	}
 
 	// Stops pawns from randomly dying when downed
+	// This is a necessary patch for preventing children from dying on pawn generation unfortunately
 	[HarmonyPatch(typeof(Pawn_HealthTracker), "CheckForStateChange")]
 	public static class Pawn_HealthTracker_CheckForStateChange_Patch
 	{
@@ -242,6 +247,7 @@ namespace RimWorldChildren
 		}
 	}
 
+	// Gives a notification that the weapon a child has picked up is dangerous for them to handle
 	[HarmonyPatch(typeof(Pawn_EquipmentTracker), "Notify_EquipmentAdded")]
 	public static class PawnEquipmentracker_NotifyEquipmentAdded_Patch{
 		[HarmonyPostfix]
@@ -254,6 +260,8 @@ namespace RimWorldChildren
 	}
 	
 	// Prevents children from being spawned with weapons too heavy for them
+	// (For example in raids a child might otherwise spawn with an auto-shotty and promptly drop it the first time
+	// they fire it at you. Which would be silly.)
 	[HarmonyPatch(typeof(PawnWeaponGenerator), "TryGenerateWeaponFor")]
 	public static class PawnWeaponGenerator_TryGenerateWeaponFor_Patch
 	{
@@ -279,7 +287,7 @@ namespace RimWorldChildren
 		}
 	}
 	
-	//Fixes null reference exception error if a Bill_Medical has no actual ingredients
+	// Fixes null reference exception error if a Bill_Medical has no actual ingredients
 	// Remove this code when it is fixed in Vanilla
 	[HarmonyPatch(typeof(Bill_Medical), "Notify_DoBillStarted")]
 	public static class Bill_Medical_NotifyDoBillStarted_Patch

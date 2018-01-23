@@ -28,6 +28,7 @@ namespace RimWorldChildren
 		}
 	}
 	// This patches the FindBedFor method to ensure adult pawns don't find cribs to sleep in
+	// It also makes cribs prioritized for children and younger
 	[HarmonyPatch(typeof(RestUtility), "FindBedFor", new []{typeof(Pawn), typeof(Pawn), typeof(bool),typeof(bool),typeof(bool)})]
 	public static class FindBedForOverride
 	{
@@ -53,8 +54,8 @@ namespace RimWorldChildren
 					return flag;
 				};
 				Building_Bed crib = (Building_Bed)GenClosest.ClosestThingReachable(sleeper.Position, sleeper.Map, ThingRequest.ForDef(ThingDef.Named("Crib")), PathEndMode.OnCell,  TraverseParms.For (traveler), 9999, validator);
-				if (crib != null && sleeper.Position.DistanceTo(__result.Position) * 0.25f > sleeper.Position.DistanceTo(crib.Position))
-					__result = crib;
+				//if (crib != null && sleeper.Position.DistanceTo(__result.Position) * 0.25f > sleeper.Position.DistanceTo(crib.Position))
+				if (crib != null) __result = crib;
 			}
 		}
 	}
@@ -80,7 +81,8 @@ namespace RimWorldChildren
 			}
 		}
 	}
-
+	
+	// Holds methods used by the above patches
 	public static class BedPatchMethods
 	{
 		public static IEnumerable<Pawn> BedCandidates(Building_Bed bed){
