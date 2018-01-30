@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using System.Linq;
-using System.Reflection;
-using Verse.Noise;
 
 namespace RimWorldChildren
 {

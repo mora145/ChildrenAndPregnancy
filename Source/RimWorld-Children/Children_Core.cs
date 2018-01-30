@@ -151,7 +151,7 @@ namespace RimWorldChildren
 	public static class JobGiver_OptimizeApparel_TryGiveJob_Patch{
 		[HarmonyPostfix]
 		internal static void TryGiveJob_Patch(ref Job __result, ref Pawn pawn){
-			if (pawn.ageTracker.CurLifeStageIndex <= AgeStage.Baby) {
+			if (pawn.ageTracker.CurLifeStageIndex < AgeStage.Child) {
 				__result = null;
 
 			}
