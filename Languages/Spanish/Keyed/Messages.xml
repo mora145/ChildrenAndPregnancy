@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <WordHumanPregnancy>Embarazada</WordHumanPregnancy>
+  <LabelGaveBirth>Ha nacido un nuevo bebé</LabelGaveBirth>
+
+  <MessageIsPregnant>¡{0} está embarazada!</MessageIsPregnant>
+  <MessageHumanBirth>¡{0} ha dado a luz! Ella ha decidido nombrar al niño "{1}".</MessageHumanBirth>
+  <MessageHavingContractions>{0} ha comenzado a tener contracciones.</MessageHavingContractions>
+
+  <MessageWeaponTooLarge>¡ADVERTENCIA! Un/una {0} es un arma demasiado grande para que {1} pueda manejarla con seguridad.</MessageWeaponTooLarge>
+
+</LanguageData>

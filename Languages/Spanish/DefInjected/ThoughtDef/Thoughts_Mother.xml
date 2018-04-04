@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <PostPartumDepression.stages.0.label>depresión post-parto</PostPartumDepression.stages.0.label>
+  <PostPartumDepression.stages.0.description>¿No debería sentirme feliz de tener un hijo...? Me siento abrumada. No creo que pueda hacer esto.</PostPartumDepression.stages.0.description>
+  <PostPartumDepression.stages.1.label>depresión post-parto</PostPartumDepression.stages.1.label>
+  <PostPartumDepression.stages.1.description>No puedo cuidar a un niño; Ni siquiera puedo cuidarme. Soy una madre horrible.</PostPartumDepression.stages.1.description>
+
+  <BabyStillborn.stages.0.label>mi bebé nació muerto</BabyStillborn.stages.0.label>
+  <BabyStillborn.stages.0.description>Mi bebé murió en mi útero.</BabyStillborn.stages.0.description>
+
+  <IGaveBirthFirstTime.stages.0.label>nueva madre</IGaveBirthFirstTime.stages.0.label>
+  <IGaveBirthFirstTime.stages.0.description>¡He traído un niño al mundo; Soy una madre ahora!</IGaveBirthFirstTime.stages.0.description>
+
+  <IGaveBirth.stages.0.label>dio a luz</IGaveBirth.stages.0.label>
+  <IGaveBirth.stages.0.description>¡He traído a otro niño al mundo!</IGaveBirth.stages.0.description>
+
+  <PartnerGaveBirth.stages.0.label>nuevo niño</PartnerGaveBirth.stages.0.label>
+  <PartnerGaveBirth.stages.0.description>¡Mi niño ha nacido!</PartnerGaveBirth.stages.0.description>
+
+  <LateTermAbortion.stages.0.label>aborto tardío</LateTermAbortion.stages.0.label>
+  <LateTermAbortion.stages.0.description>Mi feto fue abortado. Se veía como un bebé pequeño, pero tan quieto y silencioso.</LateTermAbortion.stages.0.description>
+  <LateTermAbortion.stages.1.label>mi bebé fue abortado</LateTermAbortion.stages.1.label>
+  <LateTermAbortion.stages.1.description>Mi bebé fue abortado justo antes de que pudiera nacer. Al verlo allí inmóvil, hay un dolor horrible en mi corazón que no desaparece.</LateTermAbortion.stages.1.description>
+
+
+</LanguageData>

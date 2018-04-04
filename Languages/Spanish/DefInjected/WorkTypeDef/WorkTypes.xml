@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Childcare.label>Cuidado de niños</Childcare.label>
+  <Childcare.description>Cuida a los bebés y administra a los niños.</Childcare.description>
+  <Childcare.labelShort>Cuidado de niños</Childcare.labelShort>
+  <Childcare.pawnLabel>Cuidador de niños</Childcare.pawnLabel>
+  <Childcare.gerundLabel>Cuidando niños</Childcare.gerundLabel>
+  <Childcare.verb>Preocuparse por</Childcare.verb>
+
+
+</LanguageData>

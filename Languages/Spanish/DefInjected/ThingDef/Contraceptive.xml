@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Contraceptive.label>anticonceptivo</Contraceptive.label>
+  <Contraceptive.description>Un anticonceptivo arbitrario de género fácilmente producido que suprime confiablemente embarazos no deseados por una temporada.</Contraceptive.description>
+  <Contraceptive.ingestible.ingestCommandString>Tomar {0}</Contraceptive.ingestible.ingestCommandString>
+  <Contraceptive.ingestible.ingestReportString>Tomando {0}.</Contraceptive.ingestible.ingestReportString>
+
+
+</LanguageData>

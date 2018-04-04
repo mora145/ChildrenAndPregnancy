@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Mifepristol.label>misoprostol</Mifepristol.label>
+  <Mifepristol.description>Una combinación de dos sustancias químicas que, en conjunto, terminan de manera confiable los embarazos que no sean anteriores a una temporada.</Mifepristol.description>
+  <Mifepristol.ingestible.ingestCommandString>Tomar {0}</Mifepristol.ingestible.ingestCommandString>
+  <Mifepristol.ingestible.ingestReportString>Tomando {0}.</Mifepristol.ingestible.ingestReportString>
+
+
+</LanguageData>

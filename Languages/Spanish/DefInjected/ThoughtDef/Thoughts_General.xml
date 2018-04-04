@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <GotHugged.stages.0.label>me abrazaron</GotHugged.stages.0.label>
+  <GotHugged.stages.0.description>Es bueno saber que alguien se preocupa por mí.</GotHugged.stages.0.description>
+
+  <ChildDied.stages.0.label>un niño murió</ChildDied.stages.0.label>
+  <ChildDied.stages.0.description>Un niño murió. No puedo creer que esto esté pasando.</ChildDied.stages.0.description>
+
+  <CryingBaby.stages.0.label>bebé llorando</CryingBaby.stages.0.label>
+  <CryingBaby.stages.0.description>Hay un bebé llorando en los alrededores. No es un ruido agradable.</CryingBaby.stages.0.description>
+  <CryingBaby.stages.1.label>bebés llorando</CryingBaby.stages.1.label>
+  <CryingBaby.stages.1.description>¡Hay varios bebés llorando cerca de mí. ¡Hazlos parar!</CryingBaby.stages.1.description>
+  <CryingBaby.stages.2.label>bebés llorando</CryingBaby.stages.2.label>
+  <CryingBaby.stages.2.description>¡Estoy rodeado de una horda de sirenas antiaéreas en miniatura en forma humana! ¡¡¡Mátame ahora!!!</CryingBaby.stages.2.description>
+
+
+</LanguageData>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <HumanPregnancy.label>embarazada</HumanPregnancy.label>
+  <HumanPregnancy.stages.0.label>etapa temprana</HumanPregnancy.stages.0.label>
+  <HumanPregnancy.stages.1.label>etapa media</HumanPregnancy.stages.1.label>
+  <HumanPregnancy.stages.2.label>etapa final</HumanPregnancy.stages.2.label>
+  <HumanPregnancy.stages.3.label>teniendo contracciones</HumanPregnancy.stages.3.label>
+
+  <GivingBirth.label>dando a luz</GivingBirth.label>
+  <GivingBirth.comps.0.labelTendedWell>suturada</GivingBirth.comps.0.labelTendedWell>
+  <GivingBirth.comps.0.labelTendedWellInner>suturada</GivingBirth.comps.0.labelTendedWellInner>
+  <GivingBirth.comps.0.labelSolidTendedWell>suturada</GivingBirth.comps.0.labelSolidTendedWell>
+
+  <PregnancyTear.label>rasgadura de embarazo (menor)</PregnancyTear.label>
+  <PregnancyTear.comps.0.labelTendedWell>suturada</PregnancyTear.comps.0.labelTendedWell>
+  <PregnancyTear.comps.0.labelTendedWellInner>suturada</PregnancyTear.comps.0.labelTendedWellInner>
+  <PregnancyTear.comps.0.labelSolidTendedWell>suturada</PregnancyTear.comps.0.labelSolidTendedWell>
+  <PregnancyTear.injuryProps.destroyedLabel>Destruida</PregnancyTear.injuryProps.destroyedLabel>
+
+  <PregnancyTearMajor.label>rasgadura de embarazo (mayor)</PregnancyTearMajor.label>
+  <PregnancyTearMajor.comps.0.labelTendedWell>suturada</PregnancyTearMajor.comps.0.labelTendedWell>
+  <PregnancyTearMajor.comps.0.labelTendedWellInner>suturada</PregnancyTearMajor.comps.0.labelTendedWellInner>
+  <PregnancyTearMajor.comps.0.labelSolidTendedWell>suturada</PregnancyTearMajor.comps.0.labelSolidTendedWell>
+  <PregnancyTearMajor.injuryProps.destroyedLabel>Destruida</PregnancyTearMajor.injuryProps.destroyedLabel>
+
+  <PlacentaBleed.label>placenta acreta</PlacentaBleed.label>
+  <PlacentaBleed.comps.0.labelTendedWell>resuelto</PlacentaBleed.comps.0.labelTendedWell>
+  <PlacentaBleed.comps.0.labelTendedWellInner>resuelto</PlacentaBleed.comps.0.labelTendedWellInner>
+  <PlacentaBleed.comps.0.labelSolidTendedWell>resuelto</PlacentaBleed.comps.0.labelSolidTendedWell>
+  <PlacentaBleed.injuryProps.destroyedLabel>Destruida</PlacentaBleed.injuryProps.destroyedLabel>
+
+  <PostPregnancy.label>recuperándose de haber dado a luz</PostPregnancy.label>
+  <Lactating.label>lactando</Lactating.label>
+
+  <GaveBirthFlag.label>ha dado a luz antes</GaveBirthFlag.label>
+  <GaveBirthFlag.stages.0.label>inicial-oculto</GaveBirthFlag.stages.0.label>
+
+  <Sterile.label>esteril</Sterile.label>
+
+
+</LanguageData>

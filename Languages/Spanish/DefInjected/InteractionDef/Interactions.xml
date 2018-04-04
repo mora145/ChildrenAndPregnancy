@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ScoldChild.label>regaño</ScoldChild.label>
+  <ScoldChild.logRulesInitiator.rulesStrings.0>logentry->[other_nameShortIndef] fue regañado.</ScoldChild.logRulesInitiator.rulesStrings.0>
+  <ScoldChild.logRulesRecipient.rulesStrings.0>logentry->Fue regañado por [other_nameShortIndef].</ScoldChild.logRulesRecipient.rulesStrings.0>
+
+  <HugFriend.label>abrazo</HugFriend.label>
+  <HugFriend.logRulesInitiator.rulesStrings.0>logentry->[other_nameShortIndef] fue abrazado.</HugFriend.logRulesInitiator.rulesStrings.0>
+  <HugFriend.logRulesRecipient.rulesStrings.0>logentry->Ha sido abrazado por [other_nameShortIndef].</HugFriend.logRulesRecipient.rulesStrings.0>
+
+
+</LanguageData>

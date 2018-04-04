@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <PerformAbortion.label>Realizar aborto</PerformAbortion.label>
+  <PerformAbortion.description>Aborta el embarazo</PerformAbortion.description>
+  <PerformAbortion.jobString>Realizando aborto.</PerformAbortion.jobString>
+  <PerformAbortion.successfullyRemovedHediffMessage>{0} ha abortado exitosamente {1}'s feto.</PerformAbortion.successfullyRemovedHediffMessage>
+
+
+</LanguageData>

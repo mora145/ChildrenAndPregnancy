@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <BabyState.label>niño creciendo</BabyState.label>
+  <BabyState.stages.0.label>bebé</BabyState.stages.0.label>
+  <BabyState.stages.1.label>niñito</BabyState.stages.1.label>
+  <BabyState.stages.2.label>niño</BabyState.stages.2.label>
+
+
+  <!-- This only exists separately from BabyState to get around a bug making children drop their weapons on savegame load. -->
+
+  <NoManipulationFlag.label>desactivar la manipulación</NoManipulationFlag.label>
+  <UnhappyBaby.label>bebé infeliz</UnhappyBaby.label>
+
+
+</LanguageData>

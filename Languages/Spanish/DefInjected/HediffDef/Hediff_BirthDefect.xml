@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <BirthDefectTracker.label>rastreador de defectos de nacimiento</BirthDefectTracker.label>
+  <DefectBlind.label>ciego (defecto de nacimiento)</DefectBlind.label>
+  <DefectDeaf.label>sordo (defecto de nacimiento)</DefectDeaf.label>
+  <DefectHeart.label>corazón débil (defecto de nacimiento)</DefectHeart.label>
+  <DefectStillborn.label>muerte prematura</DefectStillborn.label>
+  <FetalAlcoholSyndrome.label>síndrome de alcoholismo fetal</FetalAlcoholSyndrome.label>
+
+
+</LanguageData>
